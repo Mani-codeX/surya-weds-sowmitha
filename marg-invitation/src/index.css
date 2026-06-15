@@ -1,32 +1,351 @@
 @import "tailwindcss";
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+/* ════════════════════════════════════════════════════════════════════
+   CENTRALIZED DESIGN SYSTEM — single source of truth.
+
+   Tailwind v4 reads design tokens from this @theme block and generates the
+   utilities (bg-primary, text-secondary, font-display-lg, p-section-gap, …).
+   Change a value here and it propagates across the whole app automatically.
+
+   Tokens mirror DESIGN.md (Temple Heritage & Royal Cinematic).
+   ════════════════════════════════════════════════════════════════════ */
+@theme {
+  /* ── Colors ── */
+  --color-surface: #fff8f5;
+  --color-surface-dim: #f2d4c2;
+  --color-surface-bright: #fff8f5;
+  --color-surface-container-lowest: #ffffff;
+  --color-surface-container-low: #fff1ea;
+  --color-surface-container: #ffeade;
+  --color-surface-container-high: #ffe3d2;
+  --color-surface-container-highest: #fbddca;
+  --color-on-surface: #28180d;
+  --color-on-surface-variant: #554240;
+  --color-inverse-surface: #3f2c20;
+  --color-inverse-on-surface: #ffede4;
+  --color-outline: #89726f;
+  --color-outline-variant: #dcc0bd;
+  --color-surface-tint: #9d4139;
+
+  --color-primary: #210000;
+  --color-on-primary: #ffffff;
+  --color-primary-container: #4a0404;
+  --color-on-primary-container: #d26a5f;
+  --color-inverse-primary: #ffb4aa;
+
+  --color-secondary: #775a19;
+  --color-on-secondary: #ffffff;
+  --color-secondary-container: #fed488;
+  --color-on-secondary-container: #785a1a;
+
+  --color-tertiary: #090b04;
+  --color-on-tertiary: #ffffff;
+  --color-tertiary-container: #202219;
+  --color-on-tertiary-container: #88897d;
+
+  --color-error: #ba1a1a;
+  --color-on-error: #ffffff;
+  --color-error-container: #ffdad6;
+  --color-on-error-container: #93000a;
+
+  --color-primary-fixed: #ffdad5;
+  --color-primary-fixed-dim: #ffb4aa;
+  --color-on-primary-fixed: #410001;
+  --color-on-primary-fixed-variant: #7e2b23;
+  --color-secondary-fixed: #ffdea5;
+  --color-secondary-fixed-dim: #e9c176;
+  --color-on-secondary-fixed: #261900;
+  --color-on-secondary-fixed-variant: #5d4201;
+  --color-tertiary-fixed: #e3e3d5;
+  --color-tertiary-fixed-dim: #c7c7ba;
+  --color-on-tertiary-fixed: #1b1c14;
+  --color-on-tertiary-fixed-variant: #46483d;
+
+  --color-background: #fff8f5;
+  --color-on-background: #28180d;
+  --color-surface-variant: #fbddca;
+
+  /* ── Font families ── */
+  --font-display-lg: "Playfair Display", serif;
+  --font-headline-lg: "Playfair Display", serif;
+  --font-headline-md: "Playfair Display", serif;
+  --font-quote: "Playfair Display", serif;
+  --font-body-lg: "Manrope", sans-serif;
+  --font-body-md: "Manrope", sans-serif;
+  --font-label-caps: "Source Serif 4", serif;
+
+  /* ── Font sizes (with line-height + tracking baked into the token) ── */
+  --text-display-lg: 84px;
+  --text-display-lg--line-height: 90px;
+  --text-display-lg--letter-spacing: -0.02em;
+  --text-display-lg--font-weight: 700;
+
+  --text-display-lg-mobile: 48px;
+  --text-display-lg-mobile--line-height: 52px;
+  --text-display-lg-mobile--font-weight: 700;
+
+  --text-headline-lg: 48px;
+  --text-headline-lg--line-height: 56px;
+  --text-headline-lg--font-weight: 600;
+
+  --text-headline-lg-mobile: 32px;
+  --text-headline-lg-mobile--line-height: 40px;
+  --text-headline-lg-mobile--font-weight: 600;
+
+  --text-headline-md: 32px;
+  --text-headline-md--line-height: 40px;
+  --text-headline-md--font-weight: 500;
+
+  --text-body-lg: 20px;
+  --text-body-lg--line-height: 32px;
+  --text-body-lg--font-weight: 400;
+
+  --text-body-md: 16px;
+  --text-body-md--line-height: 26px;
+  --text-body-md--font-weight: 400;
+
+  --text-label-caps: 14px;
+  --text-label-caps--line-height: 20px;
+  --text-label-caps--letter-spacing: 0.15em;
+  --text-label-caps--font-weight: 600;
+
+  --text-quote: 28px;
+  --text-quote--line-height: 44px;
+  --text-quote--font-weight: 400;
+
+  /* ── Spacing scale ── */
+  --spacing-section-gap: 160px;
+  --spacing-element-gap: 24px;
+  --spacing-container-padding: 64px;
+  --spacing-mobile-margin: 20px;
+  --spacing-grid-gutter: 32px;
+
+  /* ── Radius (architectural / sharp) ── */
+  --radius-DEFAULT: 0.25rem;
+  --radius-lg: 0.5rem;
+  --radius-xl: 0.75rem;
 }
 
+/* ── Base ── */
 body {
-  font-family: 'Cormorant Garamond', serif;
+  background-color: var(--color-surface);
+  color: var(--color-on-surface);
+  font-family: var(--font-body-md);
+  margin: 0;
+  overflow-x: hidden;
 }
 
+/* ── Responsive spacing (mobile/tablet) ──
+   DESIGN.md specifies the desktop section-gap (160px) + container-padding
+   (64px) should compress on smaller screens (tablet 40px, mobile 20px). The
+   desktop design system values are unchanged; these only kick in below the
+   breakpoints so the 64px side padding never crushes content on phones and the
+   160px vertical rhythm doesn't leave huge dead space on small screens.
+   We override the generated utilities directly (not the @theme vars) so the
+   change is reliable regardless of how Tailwind inlines the token. */
+@media (max-width: 1024px) {
+  .px-container-padding {
+    padding-left: 40px;
+    padding-right: 40px;
+  }
+  .py-section-gap {
+    padding-top: 96px;
+    padding-bottom: 96px;
+  }
+}
+@media (max-width: 640px) {
+  .px-container-padding {
+    padding-left: var(--spacing-mobile-margin); /* 20px */
+    padding-right: var(--spacing-mobile-margin);
+  }
+  .py-section-gap {
+    padding-top: 64px;
+    padding-bottom: 64px;
+  }
+}
+
+.material-symbols-outlined {
+  font-family: "Material Symbols Outlined";
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  font-variation-settings: "FILL" 0, "wght" 300, "GRAD" 0, "opsz" 24;
+}
+
+/* ── Lenis ── */
 html.lenis,
 html.lenis body {
   height: auto;
 }
-
 .lenis.lenis-smooth {
   scroll-behavior: auto !important;
 }
-
 .lenis.lenis-smooth [data-lenis-prevent] {
   overscroll-behavior: contain;
 }
-
 .lenis.lenis-stopped {
   overflow: hidden;
 }
 
-.lenis.lenis-scrolling iframe {
+/* ════════════════════════════════════════════════════════════════════
+   DECORATIVE TEXTURES (from the source HTML)
+   ════════════════════════════════════════════════════════════════════ */
+
+/* Subtle paper grain.
+   PERF: the original applied a tiled background-image via ::before on full-page
+   elements, creating composited layers as tall as the whole document — a major
+   scroll-repaint cost on desktop. Instead we render ONE fixed, viewport-sized
+   grain layer (.grain-layer) in AmbientBackground. .silk-grain is now an inert
+   marker class so existing markup needn't change. */
+.grain-layer {
+  position: fixed;
+  inset: 0;
+  background-image: url("https://www.transparenttextures.com/patterns/natural-paper.png");
+  opacity: 0.05;
   pointer-events: none;
+  z-index: 1;
+}
+
+/* Kolam dot-grid */
+.kolam-bg {
+  background-image: radial-gradient(var(--color-secondary) 0.5px, transparent 0.5px);
+  background-size: 24px 24px;
+  opacity: 0.1;
+}
+
+/* Heavy vignette */
+.vignette-heavy {
+  background: radial-gradient(circle, transparent 40%, rgba(33, 0, 0, 0.4) 100%);
+}
+
+/* Mandapam card: ivory with thin gold inner border + corner motif */
+.mandapam-card {
+  background-color: #fff8f5;
+  border: 1px solid var(--color-outline-variant);
+  position: relative;
+  overflow: hidden;
+}
+.mandapam-card::after {
+  content: "";
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  right: 10px;
+  bottom: 10px;
+  border: 1px solid var(--color-secondary-fixed);
+  pointer-events: none;
+  opacity: 0.3;
+}
+
+/* Ambient gradient glow (maroon→bronze + antique-gold radial light).
+   The gradient is STATIC; "breathing" comes from a TRANSFORM-only animation on
+   a promoted layer — zero per-frame repaint. */
+.ambient-glow {
+  background:
+    radial-gradient(60% 50% at 50% 30%, rgba(197, 160, 89, 0.10), transparent 70%),
+    linear-gradient(180deg, #4a0404 0%, #3d2b1f 100%);
+  opacity: 0.5;
+  transform: translateZ(0);
+  will-change: transform;
+  animation: ambient-glow-drift 30s ease-in-out infinite alternate;
+}
+@keyframes ambient-glow-drift {
+  0%   { transform: translate3d(-1.5%, -1%, 0) scale(1.05); }
+  100% { transform: translate3d(1.5%, 1%, 0) scale(1.12); }
+}
+
+/* ════════════════════════════════════════════════════════════════════
+   FLOATING ELEMENTS (FloatingElements.jsx) — positioned absolutely and moved
+   only via GSAP transforms. translateZ(0) promotes each to its own GPU layer.
+   No filter / shadow — soft edges come from radial gradients + opacity.
+   ════════════════════════════════════════════════════════════════════ */
+.fx-petal,
+.fx-glow,
+.fx-floral,
+.fx-heart {
+  position: absolute;
+  top: 0;
+  left: 0;
+  will-change: transform, opacity;
+  transform: translateZ(0);
+  opacity: 0;
+}
+
+/* Glowing particle — soft luminous mote. The glow is a radial gradient (cheap),
+   NOT a blur filter. */
+.fx-glow {
+  width: 10px;
+  height: 10px;
+  border-radius: 9999px;
+  background: radial-gradient(
+    circle at 50% 50%,
+    rgba(255, 230, 180, 0.95),
+    rgba(233, 193, 118, 0.45) 45%,
+    transparent 75%
+  );
+}
+
+/* Rose petal — a teardrop via asymmetric border-radius + soft rose gradient. */
+.fx-petal {
+  width: 14px;
+  height: 18px;
+  border-radius: 100% 0 100% 0;
+  background: radial-gradient(
+    120% 120% at 30% 20%,
+    rgba(210, 106, 95, 0.9),
+    rgba(157, 65, 57, 0.85) 55%,
+    rgba(74, 4, 4, 0.6) 100%
+  );
+}
+
+/* Floral mote — sized SVG glyph (fill set inline in the component). */
+.fx-floral {
+  width: 18px;
+  height: 18px;
+}
+
+/* Heart-path mote — a soft golden dot (the romance is in the PATH, not a
+   heart icon). Kept tiny and faint so it's felt, not seen. */
+.fx-heart {
+  width: 7px;
+  height: 7px;
+  border-radius: 9999px;
+  background: radial-gradient(circle at 50% 50%, rgba(255, 222, 165, 0.95), rgba(197, 160, 89, 0.3) 70%, transparent 100%);
+}
+
+/* Permanent metallic-gold ampersand. Its own gold-foil gradient is clipped to
+   the glyph, so once the title settles it keeps a rich gradient (light top →
+   deep gold bottom) — never a flat color. Looks like gold foil stamped on the
+   card, identical to its best moment during the shine. */
+.hero-amp.hero-amp-settled {
+  background-image: linear-gradient(
+    160deg,
+    #fff3d0 0%,
+    #f4d27a 22%,
+    #d4af37 50%,
+    #b8860b 74%,
+    #8a6508 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ambient-glow {
+    animation: none;
+  }
+  /* The whole floating layer is skipped in JS under reduced motion, but hide
+     any residual just in case. */
+  .fx-petal,
+  .fx-glow,
+  .fx-floral,
+  .fx-heart {
+    display: none;
+  }
 }

@@ -1,41 +1,41 @@
-import { useEffect } from "react";
-import Lenis from "lenis";
-import Home from "./features/Home";
-import OurStory from "./features/OurStory";
+import { SmoothScrollProvider } from "./providers/SmoothScrollProvider";
+import AmbientBackground from "./components/AmbientBackground";
+import Navigation from "./components/Navigation";
+import MusicToggle from "./components/MusicToggle";
+import Hero from "./features/Hero";
+import Heritage from "./features/Heritage";
+import GarlandExchange from "./features/GarlandExchange";
+import Rituals from "./features/Rituals";
+import SaveTheDate from "./features/SaveTheDate";
+import Venue from "./features/Venue";
+import Blessings from "./features/Blessings";
+import Gallery from "./features/Gallery";
+import Rsvp from "./features/Rsvp";
+import Footer from "./features/Footer";
+
 
 function App() {
-  useEffect(() => {
-    // 1. GLOBAL SMOOTH SCROLL (Lenis)
-    // This gives the "Buttery Smooth" feel for premium experiences
-    const lenis = new Lenis({
-      duration: 1.5,
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), 
-      smoothWheel: true,
-      wheelMultiplier: 1.1,
-    });
-
-    function raf(time) {
-      lenis.raf(time);
-      requestAnimationFrame(raf);
-    }
-
-    requestAnimationFrame(raf);
-
-    // Sync Lenis with GSAP ScrollTrigger
-    lenis.on('scroll', () => {
-       // Refresh triggers if needed for complex overlaps
-    });
-
-    return () => lenis.destroy();
-  }, []);
-
   return (
-    <main className="bg-[#041c14]">
-      <Home />
-      <OurStory />
-    </main>
+    <SmoothScrollProvider>
+      <AmbientBackground />
+      <Navigation />
+      <MusicToggle />
+
+      <main className="relative z-10 overflow-hidden silk-grain">
+        <Hero />
+        <Heritage />
+        <GarlandExchange />
+        <Rituals />
+        <SaveTheDate />
+        <Venue />
+        <Blessings />
+        <Gallery />
+        <Rsvp />
+      </main>
+
+      <Footer />
+    </SmoothScrollProvider>
   );
 }
 
 export default App;
-
