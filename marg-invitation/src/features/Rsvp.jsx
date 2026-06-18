@@ -68,7 +68,7 @@ export default function Rsvp() {
         </h2>
         <p className="font-body-lg text-body-lg mb-12">
           We request the honor of your presence as we begin our new life together.
-          Kindly respond by November 15, 2024.
+          Kindly respond by June 15, 2026.
         </p>
         <form className="space-y-8 text-left" onSubmit={(e) => e.preventDefault()}>
           <div className="border-b border-secondary/30 pb-2">

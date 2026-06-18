@@ -1,4 +1,7 @@
-import Reveal from "../components/ui/Reveal";
+import { useLayoutEffect, useRef, useState } from "react";
+import { gsap } from "../lib/gsap";
+import ScratchCard from "../components/ScratchCard";
+import HeartCenterpiece from "../components/HeartCenterpiece";
 import { IMG } from "../lib/content";
 
 const GoldMotif = ({ className = "" }) => (
@@ -10,45 +13,92 @@ const GoldMotif = ({ className = "" }) => (
   </svg>
 );
 
-/** Save the Date — cinematic full-bleed image with dark overlay + gold motifs. */
+/**
+ * SaveTheDate — bordered glass panel:
+ *   ✦ · SAVE THE DATE · [scratch capsule hiding the date] · ♥ · venue · ✦
+ *
+ * The date sits under the scratch capsule (centered). Scratch it; at ~68%
+ * cleared it auto-completes and the heart + venue reveal below. Heart + venue
+ * aren't rendered until reveal → no reserved gap.
+ */
 export default function SaveTheDate() {
+  const heartRef = useRef(null);
+  const venueRef = useRef(null);
+  const [revealed, setRevealed] = useState(false);
+
+  const onScratchDone = () => setRevealed(true);
+
+  useLayoutEffect(() => {
+    if (!revealed) return;
+    const ctx = gsap.context(() => {
+      gsap
+        .timeline({ defaults: { ease: "power3.out" } })
+        .fromTo(heartRef.current, { opacity: 0, scale: 0 }, { opacity: 1, scale: 1, duration: 0.5, ease: "back.out(1.7)" }, 0)
+        .fromTo(venueRef.current, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.5 }, 0.2);
+    });
+    return () => ctx.revert();
+  }, [revealed]);
+
   return (
-    <section className="h-screen flex items-center justify-center relative">
-      {/* PERF: brightness-[0.4] filter on a full-screen image is an expensive
-          rasterization. Replaced with a plain dark overlay (composited, free). */}
+    <section className="relative flex h-screen items-center justify-center overflow-hidden">
       <div className="absolute inset-0 z-0">
-        <img
-          src={IMG.saveTheDate}
-          alt="Ancient stone temple corridor"
-          className="w-full h-full object-cover"
-        />
+        <img src={IMG.saveTheDate} alt="Ancient stone temple corridor" className="h-full w-full object-cover" />
         <div className="absolute inset-0 bg-primary/60" />
       </div>
 
-      <div className="relative z-10 text-center px-container-padding">
-        <Reveal from="fade" className="mb-8 border-y border-secondary/50 py-4 inline-block">
-          <span className="font-label-caps text-label-caps text-secondary-fixed-dim tracking-[0.5em]">
-            SAVE THE DATE
-          </span>
-        </Reveal>
-        <Reveal as="h2" from="fadeUp" delay={0.1} className="font-display-lg text-[10vw] md:text-[8vw] text-on-primary leading-none mb-12 [text-shadow:0_4px_24px_rgba(0,0,0,0.5)]">
-          12 . 12 . 24
-        </Reveal>
-        <Reveal from="fadeUp" delay={0.2} className="flex flex-col items-center gap-6">
-          <span className="font-headline-md text-secondary-fixed">
-            THE MAYOR RAMANATHAN CHETTIAR HALL
-          </span>
-          <span className="font-body-lg text-surface-container-lowest tracking-widest">
-            CHENNAI, TAMIL NADU
-          </span>
-        </Reveal>
-      </div>
+      {/* Bordered glass panel */}
+      <div className="relative z-10 mx-auto flex w-[min(90vw,460px)] flex-col items-center gap-7 rounded-[2.5rem] border border-secondary/25 bg-primary/40 px-8 py-12 text-center">
+        {/* ✦ top */}
+        <GoldMotif className="h-7 w-7 text-secondary-fixed/70" />
 
-      <div className="absolute top-1/2 left-10 -translate-y-1/2 w-32 h-32 opacity-30">
-        <GoldMotif className="text-secondary-fixed" />
-      </div>
-      <div className="absolute top-1/2 right-10 -translate-y-1/2 w-32 h-32 opacity-30">
-        <GoldMotif className="text-secondary-fixed scale-x-[-1]" />
+        {/* SAVE THE DATE */}
+        <span className="border-y border-secondary/40 py-3 font-label-caps text-label-caps tracking-[0.5em] text-secondary-fixed-dim">
+          SAVE THE DATE
+        </span>
+
+        {/* Date under the scratch capsule */}
+        <div className="relative">
+          <div
+            className={`std-breathe pointer-events-none absolute left-1/2 top-1/2 h-48 w-48 -translate-x-1/2 -translate-y-1/2 rounded-full transition-opacity duration-500 ${
+              revealed ? "opacity-0" : "opacity-100"
+            }`}
+            style={{
+              background:
+                "radial-gradient(circle, rgba(233,193,118,0.4), rgba(233,193,118,0.08) 50%, transparent 72%)",
+            }}
+          />
+          <ScratchCard threshold={0.68} brush={26} radius={9999} onComplete={onScratchDone} className="inline-block">
+            <h2 className="relative z-10 px-10 py-7 font-display-lg text-4xl leading-none text-secondary-fixed md:text-5xl [text-shadow:0_4px_24px_rgba(0,0,0,0.5)]">
+              12 • 07 • 26
+            </h2>
+            {!revealed && (
+              <>
+                <span className="std-shimmer pointer-events-none absolute inset-0 z-30 block rounded-full" aria-hidden="true" />
+                <span className="std-dust pointer-events-none absolute inset-0 z-30 block rounded-full" aria-hidden="true" />
+              </>
+            )}
+          </ScratchCard>
+        </div>
+
+        {/* heart + venue — mount only after scratch completes */}
+        {revealed && (
+          <>
+            <div ref={heartRef} className="opacity-0">
+              <HeartCenterpiece />
+            </div>
+            <div ref={venueRef} className="flex flex-col items-center gap-2 opacity-0">
+              <span className="font-headline-md text-xl text-secondary-fixed md:text-2xl">
+                THE MAYOR RAMANATHAN CHETTIAR HALL
+              </span>
+              <span className="font-body-lg text-sm tracking-widest text-surface-container-lowest">
+                CHENNAI, TAMIL NADU
+              </span>
+            </div>
+          </>
+        )}
+
+        {/* ✦ bottom */}
+        <GoldMotif className="h-7 w-7 text-secondary-fixed/70" />
       </div>
     </section>
   );

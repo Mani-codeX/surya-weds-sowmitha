@@ -4,7 +4,7 @@
  * happen in one place. Image URLs are the exact CDN links from the source HTML.
  */
 
-export const COUPLE = { bride: "Aparna", groom: "Raghav", initials: "A & R" };
+export const COUPLE = { bride: "Sowmitha", groom: "Surya", initials: "S & S" };
 
 export const IMG = {
   heritage:
@@ -25,17 +25,12 @@ export const RITUALS = [
   {
     img: "https://lh3.googleusercontent.com/aida-public/AB6AXuCkVsCsjUrgZhoq60S-g1Z1poiODC_Nqc_jrYTPP8VeYw4hAluHFgs_C2mwuPgLaTAiLWx_3sQwb9guHv_LEs3lkXl8Hm15iz-SZ8kms0bym4CcAY6t-QtmhTs2OCB-ifo2S3pB3Al1ziit-IjIGORValGN_Ha-8cdci_81eMVpbR1CJ7LSNsqnqCW13xJda_BpIEOHW4mxy-aDG6mDibHDNr4jTUfy0p8nnqu8Kv5sp8fVSzz0vfx2w1o4TC2vGrQCwwLsKhXYci4",
     title: "Nichayathartham",
-    desc: "The formal engagement where our families exchange traditional platters of fruit and jewelry to seal the union.",
-  },
-  {
-    img: "https://lh3.googleusercontent.com/aida-public/AB6AXuAzhkXW4bCv2pnuIo6CakyZI2Bmvtc-sE3pprTKpxRYfA4HIBLX8Lfw5P4oEN3dz3Z4r3l0QqKbM3R8NCsMXWx9FM57tWw9hM3PssLtgLESPUYGp_-MKuZ5B_PatGK2zLMrdtBNzXshiodDzPVQvbVvraQmwxRln9XDh59fWuaCCUfnpKYI__eoJ6pn_EaC1zAbUhRV__TXndJGvgg4LjWugXqqbHeYnqD5YIlRoxpuldqiQwOfw-CFhbwdIgw8q1gvQuT2ejdm7cY",
-    title: "Oonjal",
-    desc: "The swing ceremony where women sing traditional 'Oonjal Paattu' to ward off evil and celebrate the couple's balance.",
+    desc: "A cherished celebration where two families come together with love, blessings, and joyful hearts, marking the beginning of our forever.",
   },
   {
     img: "https://lh3.googleusercontent.com/aida-public/AB6AXuB_IMOlxcGByk53D7Y1MP24kJLiuCzk45PXczSV2rKER8XLUQSyxqNVRSlG747zNSQyGZv0vza5OBBWySi0NsJUbhn3jRu3IBre2W0-N7GQyO9PNIM4L4gyCQA_YoFDIDaesxuA_1dNE0EEctjTWkak0Un4Z3aJRYK_xQuJMx_ZQUBB_tH-axyR6fm1sgkWSMQwQCf7crcrloEoi-cjCHFP7pEQnN1Zaa8pqBRLAZ1jDJluNk5SHb60zd7mjw_Lnox228h5iit-FXA",
     title: "Muhurtham",
-    desc: "The most auspicious hour when the Thali is tied, signifying the official spiritual and social union of two lives.",
+    desc: "The sacred moment when vows are exchanged and two souls unite, embarking on a lifetime of love, laughter, and togetherness.",
   },
 ];
 

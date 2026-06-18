@@ -98,7 +98,7 @@ export default function Navigation() {
         </button>
 
         <span className="relative mb-10 font-label-caps text-label-caps tracking-[0.4em] text-secondary-fixed">
-          APARNA &amp; RAGHAV
+          SOWMITHA &amp; SURYA
         </span>
 
         <nav ref={listRef} className="relative flex flex-col items-center gap-6 md:gap-8">

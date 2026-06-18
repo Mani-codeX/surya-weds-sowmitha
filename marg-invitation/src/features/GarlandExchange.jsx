@@ -128,8 +128,8 @@ export default function GarlandExchange() {
       </div>
 
       <div className="relative z-10 w-full max-w-5xl px-mobile-margin md:px-container-padding py-12 md:py-0 text-center">
-        <h3 className="mb-8 md:mb-16 font-headline-lg text-3xl md:text-headline-lg text-primary">
-          The Garland Exchange
+        <h3 className="mb-8 md:mb-16 font-headline-lg text-4xl italic md:text-6xl text-primary">
+          From Friendship to Forever
         </h3>
 
         {/* Portrait row — tighter gap on desktop so the couple feels connected;
@@ -138,10 +138,10 @@ export default function GarlandExchange() {
           {/* Groom */}
           <div ref={groomRef} className="relative z-10 will-change-transform">
             <div className="mx-auto w-[38vw] max-w-[200px] sm:max-w-[230px] md:w-72 md:max-w-none aspect-[3/4.4] overflow-hidden rounded-t-full border-2 border-secondary/50 p-1 shadow-xl">
-              <img src={IMG.groom} alt="Raghav" className="h-full w-full object-cover" />
+              <img src={IMG.groom} alt="Surya" className="h-full w-full object-cover" />
             </div>
             <p className="mt-3 md:mt-5 font-label-caps text-sm sm:text-base md:text-lg tracking-[0.25em] text-secondary">
-              RAGHAV
+              SURYA
             </p>
           </div>
 
@@ -159,17 +159,17 @@ export default function GarlandExchange() {
           {/* Bride */}
           <div ref={brideRef} className="relative z-10 will-change-transform">
             <div className="mx-auto w-[38vw] max-w-[200px] sm:max-w-[230px] md:w-72 md:max-w-none aspect-[3/4.4] overflow-hidden rounded-t-full border-2 border-secondary/50 p-1 shadow-xl">
-              <img src={IMG.bride} alt="Aparna" className="h-full w-full object-cover" />
+              <img src={IMG.bride} alt="Sowmitha" className="h-full w-full object-cover" />
             </div>
             <p className="mt-3 md:mt-5 font-label-caps text-sm sm:text-base md:text-lg tracking-[0.25em] text-secondary">
-              APARNA
+              SOWMITHA
             </p>
           </div>
         </div>
 
-        <p className="mx-auto mt-8 md:mt-14 max-w-lg font-body-lg text-base md:text-body-lg text-on-surface-variant">
-          Two souls slowly coming together—witness the Maalai Maatru, where two
-          families become one through the exchange of sacred flowers.
+        <p className="mx-auto mt-8 md:mt-14 max-w-xl font-quote text-xl italic md:text-2xl leading-relaxed text-on-surface-variant">
+          From best friends to soulmates, and now to bride and groom ✨ Every
+          chapter of our story led us to this beautiful forever.
         </p>
       </div>
     </section>

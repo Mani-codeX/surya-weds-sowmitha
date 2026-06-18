@@ -178,7 +178,7 @@ export default function Hero() {
           ref={eyebrowRef}
           className="mb-6 font-label-caps text-label-caps tracking-[0.4em] text-secondary opacity-0"
         >
-          TOGETHER WITH THEIR FAMILIES
+          WITH JOY IN OUR HEARTS AND BLESSINGS FROM OUR FAMILIES
         </p>
 
         {/* Title — the gold-foil gradient + clip are applied by JS on load so
@@ -199,7 +199,7 @@ export default function Hero() {
           ref={quoteRef}
           className="mt-8 max-w-xl font-quote text-xl md:text-quote italic text-on-surface-variant opacity-0"
         >
-          A timeless celebration of love, tradition and destiny.
+          Two souls, one promise, and a lifetime of love.
         </p>
 
         {/* gold ornamental divider */}
@@ -211,9 +211,9 @@ export default function Hero() {
         </div>
 
         <div ref={metaRef} className="mt-10 flex flex-col items-center gap-3 font-label-caps text-label-caps tracking-[0.25em] text-primary md:flex-row md:gap-10">
-          <span className="opacity-0">DECEMBER 12, 2024</span>
+          <span className="opacity-0">JULY 12, 2026</span>
           <span className="hidden h-4 w-px bg-secondary/50 md:block opacity-0" />
-          <span className="opacity-0">CHENNAI, TAMIL NADU</span>
+          <span className="opacity-0">BODINAYAKANUR, TAMIL NADU</span>
         </div>
       </div>
 

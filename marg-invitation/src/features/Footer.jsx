@@ -19,7 +19,7 @@ export default function Footer() {
         ))}
       </div>
       <p className="font-body-md text-on-primary/50">
-        © 2024 {COUPLE.bride} &amp; {COUPLE.groom}. Handcrafted with Heritage.
+        © 2026 {COUPLE.bride} &amp; {COUPLE.groom}. Handcrafted with Heritage.
       </p>
     </footer>
   );
