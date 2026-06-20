@@ -68,21 +68,23 @@ export default function ScratchCard({
       }
       ctx.clip();
 
-      // base metallic gold sheen
+      // base metallic gold sheen — richer multi-stop "foil" with bright band
       const g = ctx.createLinearGradient(0, 0, w, h);
-      g.addColorStop(0, "#6f4f10");
-      g.addColorStop(0.25, "#caa24b");
-      g.addColorStop(0.5, "#f4dd9a");
-      g.addColorStop(0.75, "#caa24b");
-      g.addColorStop(1, "#7a5611");
+      g.addColorStop(0, "#5e4310");
+      g.addColorStop(0.18, "#a9822f");
+      g.addColorStop(0.4, "#e8c873");
+      g.addColorStop(0.5, "#fbe6b4");
+      g.addColorStop(0.6, "#e8c873");
+      g.addColorStop(0.82, "#a9822f");
+      g.addColorStop(1, "#5e4310");
       ctx.fillStyle = g;
       ctx.fillRect(0, 0, w, h);
 
-      // diagonal shimmer streak
+      // soft, subtle diagonal sheen (low opacity — not a bright blinking band)
       const s = ctx.createLinearGradient(0, 0, w, h);
-      s.addColorStop(0.35, "rgba(255,255,255,0)");
-      s.addColorStop(0.5, "rgba(255,250,235,0.5)");
-      s.addColorStop(0.65, "rgba(255,255,255,0)");
+      s.addColorStop(0.4, "rgba(255,255,255,0)");
+      s.addColorStop(0.5, "rgba(255,250,235,0.18)");
+      s.addColorStop(0.6, "rgba(255,255,255,0)");
       ctx.fillStyle = s;
       ctx.fillRect(0, 0, w, h);
 
@@ -98,8 +100,15 @@ export default function ScratchCard({
         ctx.fill();
       }
 
-      // ── engraved pill outline (rounded, embossed) ──
-      const pad = Math.max(8, Math.min(w, h) * 0.05);
+      // soft inner vignette for depth (darker towards the edges)
+      const vg = ctx.createRadialGradient(w / 2, h / 2, Math.min(w, h) * 0.2, w / 2, h / 2, Math.max(w, h) * 0.62);
+      vg.addColorStop(0, "rgba(0,0,0,0)");
+      vg.addColorStop(1, "rgba(70,46,8,0.35)");
+      ctx.fillStyle = vg;
+      ctx.fillRect(0, 0, w, h);
+
+      // ── engraved pill outline (embossed double rule) ──
+      const pad = Math.max(8, Math.min(w, h) * 0.045);
       const roundPath = (inset) => {
         const rr2 = Math.min(rr - inset, h / 2 - inset);
         ctx.beginPath();
@@ -107,20 +116,38 @@ export default function ScratchCard({
         else ctx.rect(inset, inset, w - inset * 2, h - inset * 2);
       };
       ctx.lineWidth = 2;
-      roundPath(pad - 1); ctx.strokeStyle = "rgba(90,58,10,0.45)"; ctx.stroke(); // shadow
+      roundPath(pad - 1); ctx.strokeStyle = "rgba(80,52,8,0.5)"; ctx.stroke(); // shadow
       ctx.lineWidth = 1;
-      roundPath(pad + 1); ctx.strokeStyle = "rgba(255,245,215,0.5)"; ctx.stroke(); // highlight
-      ctx.lineWidth = 1.5;
-      roundPath(pad); ctx.strokeStyle = "rgba(120,78,14,0.75)"; ctx.stroke(); // main rule
+      roundPath(pad + 1); ctx.strokeStyle = "rgba(255,248,222,0.6)"; ctx.stroke(); // highlight
+      ctx.lineWidth = 1.6;
+      roundPath(pad); ctx.strokeStyle = "rgba(120,78,14,0.85)"; ctx.stroke(); // main rule
+      ctx.lineWidth = 1;
+      roundPath(pad + 6); ctx.strokeStyle = "rgba(120,78,14,0.45)"; ctx.stroke(); // inner hairline
+
+      // corner kolam dots along the engraved border (4 corners, small clusters)
+      const ins = pad + 13;
+      const cornerDots = (cx, cy, sx, sy) => {
+        ctx.fillStyle = "rgba(80,52,8,0.7)";
+        for (let i = 0; i < 3; i++) {
+          ctx.beginPath(); ctx.arc(cx + sx * i * 7, cy, 1.5, 0, Math.PI * 2); ctx.fill();
+          ctx.beginPath(); ctx.arc(cx, cy + sy * i * 7, 1.5, 0, Math.PI * 2); ctx.fill();
+        }
+      };
+      cornerDots(ins, ins, 1, 1);
+      cornerDots(w - ins, ins, -1, 1);
+      cornerDots(ins, h - ins, 1, -1);
+      cornerDots(w - ins, h - ins, -1, -1);
 
       // ── single centered prompt (engraved), sized to fit the pill cleanly ──
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
       const fs = Math.max(9, Math.min(w / 26, 13));
-      ctx.font = `600 ${fs}px 'Source Serif 4', serif`;
-      ctx.fillStyle = "rgba(80,50,8,0.6)"; // engraved shadow
-      ctx.fillText("✦  SCRATCH TO REVEAL  ✦", w / 2 + 0.6, h / 2 + 0.6);
-      ctx.fillStyle = "rgba(255,248,225,0.95)"; // raised highlight
+      ctx.font = `700 ${fs}px 'Source Serif 4', serif`;
+      // engraved-into-gold look: a faint light top-edge + a strong dark fill
+      // so the label reads clearly on the bright foil.
+      ctx.fillStyle = "rgba(255,245,215,0.5)"; // highlight (just below)
+      ctx.fillText("✦  SCRATCH TO REVEAL  ✦", w / 2, h / 2 + 1);
+      ctx.fillStyle = "rgba(74,34,4,0.9)"; // deep engraved brown
       ctx.fillText("✦  SCRATCH TO REVEAL  ✦", w / 2, h / 2);
 
       ctx.restore();
@@ -138,19 +165,35 @@ export default function ScratchCard({
       if (!doneRef.current) paintCover();
     };
 
-    // Erase a soft circular dab at (x, y).
-    const erase = (x, y) => {
+    // Soft round-cap stroke between two points → continuous erase even on fast
+    // drags (no dotted gaps), which is what makes the scratch feel real.
+    let last = null;
+    const eraseTo = (x, y) => {
       ctx.globalCompositeOperation = "destination-out";
-      // soft brush: a small radial gradient so edges feather
+      ctx.strokeStyle = "rgba(0,0,0,1)";
+      ctx.lineWidth = brush * 2;
+      ctx.lineCap = "round";
+      ctx.lineJoin = "round";
+      ctx.beginPath();
+      if (last) {
+        ctx.moveTo(last.x, last.y);
+        ctx.lineTo(x, y);
+      } else {
+        ctx.moveTo(x, y);
+        ctx.lineTo(x + 0.1, y + 0.1);
+      }
+      ctx.stroke();
+      // a soft round dab at the head for feathered edges + a satisfying "tip"
       const grad = ctx.createRadialGradient(x, y, 0, x, y, brush);
       grad.addColorStop(0, "rgba(0,0,0,1)");
-      grad.addColorStop(0.7, "rgba(0,0,0,1)");
+      grad.addColorStop(0.75, "rgba(0,0,0,1)");
       grad.addColorStop(1, "rgba(0,0,0,0)");
       ctx.fillStyle = grad;
       ctx.beginPath();
       ctx.arc(x, y, brush, 0, Math.PI * 2);
       ctx.fill();
       ctx.globalCompositeOperation = "source-over";
+      last = { x, y };
     };
 
     // Throttled progress sampling (cheap: downscaled alpha scan).
@@ -193,18 +236,20 @@ export default function ScratchCard({
     const start = (e) => {
       if (doneRef.current) return;
       drawingRef.current = true;
+      last = null; // begin a fresh stroke
       const { x, y } = pos(e);
-      erase(x, y);
+      eraseTo(x, y);
     };
     const move = (e) => {
       if (!drawingRef.current || doneRef.current) return;
       if (e.cancelable) e.preventDefault(); // stop page scroll while scratching
       const { x, y } = pos(e);
-      erase(x, y);
+      eraseTo(x, y); // continuous stroke from the last point → no gaps
       sampleProgress();
     };
     const end = () => {
       drawingRef.current = false;
+      last = null; // next stroke starts fresh, not connected to this end-point
     };
 
     resize();

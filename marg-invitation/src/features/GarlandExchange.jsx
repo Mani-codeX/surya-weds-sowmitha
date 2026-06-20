@@ -4,55 +4,46 @@ import { useResponsive } from "../hooks/useResponsive";
 import HeartCenterpiece from "../components/HeartCenterpiece";
 import { IMG } from "../lib/content";
 
-/**
- * GarlandExchange — the emotional centerpiece. Pinned + scrubbed, it plays a
- * choreographed sequence as the user scrolls:
- *
- *   1. Raghav portrait slides in from the left  (x -120→0, opacity, scale 0.9→1)
- *   2. Aparna portrait slides in from the right (x +120→0, opacity, scale 0.9→1)
- *   3. The gold "destiny" line grows from the center (scaleX 0→1)
- *   4. The heart pops in (scale 0 → 1.2 → 1, opacity) — its own glow pulse
- *   5. Both portraits drift subtly toward each other (Raghav +20, Aparna -20)
- *
- * Everything is scrub-linked → it plays forward on scroll-down and rewinds on
- * scroll-up. Transforms + opacity only (GPU). The line uses scaleX (not width)
- * so nothing triggers layout. A few rose petals drift while the section lives.
- */
+
 export default function GarlandExchange() {
   const sectionRef = useRef(null);
   const groomRef = useRef(null);
   const brideRef = useRef(null);
   const lineRef = useRef(null);
   const heartRef = useRef(null);
-  const petalsRef = useRef(null);
+  const contentRef = useRef(null);
   const { isMobile, prefersReducedMotion } = useResponsive();
 
   useLayoutEffect(() => {
     const section = sectionRef.current;
     if (!section) return;
-
     const ctx = gsap.context(() => {
-      // Reduced motion: show the final composed state, no scrub/pin.
       if (prefersReducedMotion) {
-        gsap.set([groomRef.current, brideRef.current], { x: 0, opacity: 1, scale: 1 });
+        gsap.set([groomRef.current, brideRef.current], { x: 0 });
         gsap.set(lineRef.current, { scaleX: 1 });
         gsap.set(heartRef.current, { scale: 1, opacity: 1 });
         return;
       }
 
-      // Initial hidden states.
-      gsap.set(groomRef.current, { x: -120, opacity: 0, scale: 0.9 });
-      gsap.set(brideRef.current, { x: 120, opacity: 0, scale: 0.9 });
+      // Start: portraits HIDDEN and far apart on the sides; everything is
+      // revealed gradually as the user scrolls (scrub).
+      const spread = isMobile ? 80 : 220;
+      gsap.set(groomRef.current, { x: -spread, opacity: 0, scale: 0.92 });
+      gsap.set(brideRef.current, { x: spread, opacity: 0, scale: 0.92 });
       gsap.set(lineRef.current, { scaleX: 0, transformOrigin: "center center" });
       gsap.set(heartRef.current, { scale: 0, opacity: 0 });
 
+      // how far the portraits draw in toward the centre at the end (gentle —
+      // they end up closer, but with a comfortable gap, not touching).
+      const close = isMobile ? 4 : 14;
+
       const tl = gsap.timeline({
-        defaults: { ease: "power3.out" },
+        defaults: { ease: "none" },
         scrollTrigger: {
           trigger: section,
           start: "top top",
-          // enough scroll distance for the 5 beats to read clearly
-          end: "+=140%",
+          // long distance → the whole thing plays slowly as you scroll
+          end: "+=260%",
           scrub: 1,
           pin: true,
           pinSpacing: true,
@@ -62,45 +53,26 @@ export default function GarlandExchange() {
       });
 
       tl
-        // STEP 1 — Raghav slides in from the left
-        .to(groomRef.current, { x: 0, opacity: 1, scale: 1, duration: 1.2 }, 0)
-        // STEP 2 — Aparna slides in from the right (slightly after)
-        .to(brideRef.current, { x: 0, opacity: 1, scale: 1, duration: 1.2 }, 0.6)
-        // STEP 3 — the destiny line grows from the center
-        .to(lineRef.current, { scaleX: 1, duration: 1, ease: "power2.inOut" }, 1.7)
-        // STEP 4 — heart pops in (0 → 1.2 → 1)
-        .to(heartRef.current, { opacity: 1, scale: 1.2, duration: 0.6, ease: "back.out(2)" }, 2.5)
-        .to(heartRef.current, { scale: 1, duration: 0.4, ease: "power2.out" }, 3.1)
-        // STEP 5 — both portraits drift subtly toward each other
-        .to(groomRef.current, { x: 20, duration: 0.8, ease: "sine.inOut" }, 3.4)
-        .to(brideRef.current, { x: -20, duration: 0.8, ease: "sine.inOut" }, 3.4)
-        // brief hold so the composed moment lingers
-        .to({}, { duration: 0.6 });
-
-      // ── Rose petals: scoped to this section, slow drift, low density ──
-      const petals = petalsRef.current.querySelectorAll(".ge-petal");
-      petals.forEach((petal, i) => {
-        const drift = () => {
-          gsap.set(petal, {
-            xPercent: gsap.utils.random(0, 90),
-            yPercent: -10,
-            opacity: 0,
-            rotation: gsap.utils.random(0, 360),
-            scale: gsap.utils.random(0.7, 1.1),
-          });
-          const dur = gsap.utils.random(11, 18);
-          gsap
-            .timeline({ onComplete: drift })
-            .to(petal, { opacity: gsap.utils.random(0.35, 0.6), duration: 2.5 }, 0)
-            .to(petal, { yPercent: 1000, xPercent: `+=${gsap.utils.random(-30, 30)}`, rotation: `+=${gsap.utils.random(120, 300)}`, duration: dur, ease: "none" }, 0)
-            .to(petal, { opacity: 0, duration: 3 }, dur - 3);
-        };
-        gsap.delayedCall(i * gsap.utils.random(2, 4), drift);
-      });
+        // 1. groom fades in from the left and glides toward the centre
+        .to(groomRef.current, { x: 0, opacity: 1, scale: 1, duration: 1.6 }, 0)
+        // 2. bride fades in from the right and glides toward the centre
+        .to(brideRef.current, { x: 0, opacity: 1, scale: 1, duration: 1.6 }, 0.3)
+        // 3. the gold line grows from the centre, joining them
+        .to(lineRef.current, { scaleX: 1, duration: 1.2, ease: "power2.inOut" }, 2.1)
+        // 4. the heart pops in on the line once it completes
+        .to(heartRef.current, { opacity: 1, scale: 1.2, duration: 0.6, ease: "back.out(2)" }, 3.1)
+        .to(heartRef.current, { scale: 1, duration: 0.4, ease: "power2.out" }, 3.7)
+        // 5. both portraits draw a little closer so the line fully joins them
+        .to(groomRef.current, { x: close, duration: 0.9, ease: "power1.inOut" }, 3.9)
+        .to(brideRef.current, { x: -close, duration: 0.9, ease: "power1.inOut" }, 3.9)
+        // hold the composed moment
+        .to({}, { duration: 0.6 })
+        // 6. graceful EXIT — the whole composition lifts + fades as you scroll
+        //    past, so leaving the section feels intentional and premium.
+        .to(contentRef.current, { y: -70, opacity: 0, duration: 1, ease: "power2.in" });
 
       ScrollTrigger.refresh();
     }, section);
-
     return () => ctx.revert();
   }, [isMobile, prefersReducedMotion]);
 
@@ -108,66 +80,53 @@ export default function GarlandExchange() {
     <section
       ref={sectionRef}
       id="garland"
-      className="relative flex min-h-screen items-center justify-center overflow-hidden bg-surface-container-low"
+      className="min-h-screen flex items-center justify-center bg-surface-container-low relative overflow-hidden"
     >
       <div className="absolute inset-0 kolam-bg opacity-30" />
-
-      {/* Rose petals layer (scoped to this section) */}
-      <div ref={petalsRef} className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
-        {Array.from({ length: isMobile ? 3 : 5 }).map((_, i) => (
-          <span
-            key={i}
-            className="ge-petal absolute left-0 top-0 h-3.5 w-3 will-change-transform"
-            style={{
-              borderRadius: "100% 0 100% 0",
-              background:
-                "radial-gradient(120% 120% at 30% 20%, rgba(210,106,95,0.9), rgba(157,65,57,0.85) 55%, rgba(74,4,4,0.6))",
-            }}
-          />
-        ))}
-      </div>
-
-      <div className="relative z-10 w-full max-w-5xl px-mobile-margin md:px-container-padding py-12 md:py-0 text-center">
-        <h3 className="mb-8 md:mb-16 font-headline-lg text-4xl italic md:text-6xl text-primary">
+      <div ref={contentRef} className="w-full max-w-6xl px-mobile-margin md:px-container-padding text-center">
+        <h3 className="font-headline-lg text-3xl md:text-headline-lg text-primary mb-12 md:mb-20">
           From Friendship to Forever
         </h3>
 
-        {/* Portrait row — tighter gap on desktop so the couple feels connected;
-            on mobile the two arches sit close and large (~42vw each). */}
-        <div className="relative flex items-center justify-center gap-4 sm:gap-6 md:gap-10">
+        {/* Portrait row — portraits sit CLOSE with only a narrow centre gap, so
+            the couple feels together and the line truly joins them. */}
+        <div className="relative flex items-start justify-center gap-0">
           {/* Groom */}
           <div ref={groomRef} className="relative z-10 will-change-transform">
-            <div className="mx-auto w-[38vw] max-w-[200px] sm:max-w-[230px] md:w-72 md:max-w-none aspect-[3/4.4] overflow-hidden rounded-t-full border-2 border-secondary/50 p-1 shadow-xl">
-              <img src={IMG.groom} alt="Surya" className="h-full w-full object-cover" />
+            <div className="w-[36vw] max-w-[220px] sm:max-w-[250px] md:w-72 md:max-w-none aspect-[3/4.4] overflow-hidden rounded-t-full border-2 border-secondary/50 p-1">
+              <img src={IMG.groom} alt="Surya" className="w-full h-full object-cover" />
             </div>
-            <p className="mt-3 md:mt-5 font-label-caps text-sm sm:text-base md:text-lg tracking-[0.25em] text-secondary">
+            <p className="mt-3 md:mt-4 font-label-caps text-xs sm:text-sm md:text-base tracking-[0.2em] text-secondary">
               SURYA
             </p>
           </div>
 
-          {/* Center: destiny line + heart */}
-          <div className="flex shrink-0 flex-col items-center justify-center gap-4 md:gap-6">
+          {/* Center — NARROW gap; the line spans it (extending slightly under
+              each card so it joins them) + heart centred on the line. */}
+          <div className="relative flex w-24 flex-none flex-col items-center justify-center self-start aspect-[3/4.4] max-h-[230px] sm:max-h-[280px] md:max-h-[400px] sm:w-32 md:w-44">
             <div
               ref={lineRef}
-              className="h-1 w-10 sm:w-16 md:w-28 origin-center bg-secondary-fixed shadow-[0_0_15px_rgba(233,193,118,0.5)]"
+              className="absolute left-0 right-0 top-[62%] h-1 -translate-y-1/2 origin-center rounded-full bg-secondary-fixed shadow-[0_0_15px_rgba(233,193,118,0.5)]"
             />
-            <div ref={heartRef} className="will-change-transform">
-              <HeartCenterpiece />
+            <div className="absolute left-1/2 top-[62%] z-10 -translate-x-1/2 -translate-y-1/2">
+              <div ref={heartRef} className="will-change-transform">
+                <HeartCenterpiece size={isMobile ? 44 : 64} />
+              </div>
             </div>
           </div>
 
           {/* Bride */}
           <div ref={brideRef} className="relative z-10 will-change-transform">
-            <div className="mx-auto w-[38vw] max-w-[200px] sm:max-w-[230px] md:w-72 md:max-w-none aspect-[3/4.4] overflow-hidden rounded-t-full border-2 border-secondary/50 p-1 shadow-xl">
-              <img src={IMG.bride} alt="Sowmitha" className="h-full w-full object-cover" />
+            <div className="w-[36vw] max-w-[220px] sm:max-w-[250px] md:w-72 md:max-w-none aspect-[3/4.4] overflow-hidden rounded-t-full border-2 border-secondary/50 p-1">
+              <img src={IMG.bride} alt="Sowmitha" className="w-full h-full object-cover" />
             </div>
-            <p className="mt-3 md:mt-5 font-label-caps text-sm sm:text-base md:text-lg tracking-[0.25em] text-secondary">
+            <p className="mt-3 md:mt-4 font-label-caps text-xs sm:text-sm md:text-base tracking-[0.2em] text-secondary">
               SOWMITHA
             </p>
           </div>
         </div>
 
-        <p className="mx-auto mt-8 md:mt-14 max-w-xl font-quote text-xl italic md:text-2xl leading-relaxed text-on-surface-variant">
+        <p className="mx-auto mt-12 md:mt-16 max-w-lg font-body-lg text-base md:text-body-lg text-on-surface-variant">
           From best friends to soulmates, and now to bride and groom ✨ Every
           chapter of our story led us to this beautiful forever.
         </p>

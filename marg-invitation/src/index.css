@@ -348,6 +348,25 @@ html.lenis body {
   to { transform: rotate(360deg); }
 }
 
+/* Scratch capsule — smooth gold light sweep gliding across (elegant, no blink).
+   Animates background-position of a soft diagonal highlight; clipped to the
+   rounded capsule by the element's overflow/rounded-full. */
+.scratch-shine {
+  background: linear-gradient(
+    105deg,
+    transparent 38%,
+    rgba(255, 252, 240, 0.45) 50%,
+    transparent 62%
+  );
+  background-size: 250% 100%;
+  background-position: 180% center;
+  animation: scratch-shine 3.6s ease-in-out infinite;
+}
+@keyframes scratch-shine {
+  0% { background-position: 180% center; }
+  60%, 100% { background-position: -80% center; }
+}
+
 /* Heart / venue entrance when they mount mid-scratch (transform + opacity). */
 .std-fade-in {
   animation: std-fade-in 0.5s ease-out both;
@@ -392,6 +411,7 @@ html.lenis body {
   .std-breathe,
   .std-shimmer,
   .std-dust,
+  .scratch-shine,
   .mandala-spin,
   .mandala-spin-rev {
     animation: none;

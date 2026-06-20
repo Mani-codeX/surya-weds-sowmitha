@@ -50,21 +50,30 @@ export default function Heritage() {
       gsap.set(tlLineRef.current, { scaleX: 0 });
       gsap.set(stops, { opacity: 0, y: 14 });
 
-      const tl = gsap.timeline({
-        scrollTrigger: { trigger: root, start: "top 78%", once: true },
-      });
-
-      // heading split-text reveal — and the timeline accent animates alongside
-      tl.fromTo(
+      // Heading reveal — triggered by the narrative column.
+      gsap.fromTo(
         chars,
         { opacity: 0, yPercent: 60 },
-        { opacity: 1, yPercent: 0, duration: 1.2, stagger: 0.025, ease: "power3.out" },
-        0
-      )
-        // the journey line draws left → right
-        .to(tlLineRef.current, { scaleX: 1, duration: 1, ease: "power2.inOut", transformOrigin: "left center" }, 0.4)
-        // milestone stops rise + fade in one after another
-        .to(stops, { opacity: 1, y: 0, duration: 0.5, stagger: 0.18, ease: "back.out(1.6)" }, 0.7);
+        {
+          opacity: 1,
+          yPercent: 0,
+          duration: 1.2,
+          stagger: 0.025,
+          ease: "power3.out",
+          scrollTrigger: { trigger: root, start: "top 80%", once: true },
+        }
+      );
+
+      // Timeline — its OWN trigger anchored to the timeline element, so it
+      // animates exactly when the timeline scrolls into view (works on mobile,
+      // where the image stacks above and the column top is reached early).
+      const timelineEl = tlStopsRef.current.parentElement;
+      const tlTimeline = gsap.timeline({
+        scrollTrigger: { trigger: timelineEl, start: "top 88%", once: true },
+      });
+      tlTimeline
+        .to(tlLineRef.current, { scaleX: 1, duration: 1, ease: "power2.inOut", transformOrigin: "left center" })
+        .to(stops, { opacity: 1, y: 0, duration: 0.5, stagger: 0.18, ease: "back.out(1.6)" }, 0.4);
 
       ScrollTrigger.refresh();
     }, root);

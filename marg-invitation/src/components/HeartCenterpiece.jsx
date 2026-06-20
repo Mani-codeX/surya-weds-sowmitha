@@ -16,7 +16,7 @@ import { useResponsive } from "../hooks/useResponsive";
  * is a static radial gradient masked by clip-path; only its translate/opacity
  * animate. Subtle scale (1 → 1.05 → 1), 3–5s, infinite. Honors reduced motion.
  */
-export default function HeartCenterpiece({ className = "" }) {
+export default function HeartCenterpiece({ className = "", size = 64 }) {
   const rootRef = useRef(null);
   const heartRef = useRef(null);
   const outlineRef = useRef(null);
@@ -92,7 +92,7 @@ export default function HeartCenterpiece({ className = "" }) {
     <div
       ref={rootRef}
       className={`relative ${className}`}
-      style={{ width: 64, height: 64 }}
+      style={{ width: size, height: size }}
       aria-hidden="true"
     >
       {/* particles rise from just above the heart */}
