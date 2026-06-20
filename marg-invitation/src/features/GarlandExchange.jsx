@@ -106,9 +106,9 @@ export default function GarlandExchange() {
           <div className="relative flex w-24 flex-none flex-col items-center justify-center self-start aspect-[3/4.4] max-h-[230px] sm:max-h-[280px] md:max-h-[400px] sm:w-32 md:w-44">
             <div
               ref={lineRef}
-              className="absolute left-0 right-0 top-[62%] h-1 -translate-y-1/2 origin-center rounded-full bg-secondary-fixed shadow-[0_0_15px_rgba(233,193,118,0.5)]"
+              className="absolute left-0 right-0 top-[82%] h-1 -translate-y-1/2 origin-center rounded-full bg-secondary-fixed shadow-[0_0_15px_rgba(233,193,118,0.5)]"
             />
-            <div className="absolute left-1/2 top-[62%] z-10 -translate-x-1/2 -translate-y-1/2">
+            <div className="absolute left-1/2 top-[82%] z-10 -translate-x-1/2 -translate-y-1/2">
               <div ref={heartRef} className="will-change-transform">
                 <HeartCenterpiece size={isMobile ? 44 : 64} />
               </div>
