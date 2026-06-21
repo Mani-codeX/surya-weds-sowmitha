@@ -1,6 +1,7 @@
 import Section from "../components/ui/Section";
 import Reveal from "../components/ui/Reveal";
 import { useStagger } from "../hooks/useAnimations";
+import { ICONS, CalendarHeart } from "../lib/icons";
 import { RITUALS } from "../lib/content";
 
 /** Rotating mandala RINGS only (no heart) — gets the spin animation. */
@@ -53,7 +54,14 @@ const CircleOfLove = ({ initial, spinClass, wrapperClass }) => (
 
 /** Rituals / The Celebrations — a gallery of two sacred wedding moments. */
 export default function Rituals() {
-  const gridRef = useStagger({ from: "fadeUp", stagger: 0.18 });
+  // Reveal as soon as the cards enter the viewport (start early) and snappily
+  // (short duration + small stagger) so the section never feels slow.
+  const gridRef = useStagger({
+    from: "fadeUp",
+    stagger: 0.08,
+    duration: 0.55,
+    trigger: { start: "top 95%" },
+  });
 
   return (
     <Section id="rituals" className="relative bg-primary text-on-primary overflow-hidden">
@@ -88,10 +96,12 @@ export default function Rituals() {
           ref={gridRef}
           className="mx-auto grid w-full max-w-6xl grid-cols-1 gap-10 md:grid-cols-2 md:gap-14"
         >
-          {RITUALS.map((r) => (
+          {RITUALS.map((r) => {
+            const RitualIcon = r.icon ? ICONS[r.icon] : null;
+            return (
             <div
               key={r.title}
-              className="mandapam-card group bg-primary-container p-8 md:p-10 border-secondary/30 shadow-lg transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl"
+              className="mandapam-card group flex flex-col bg-primary-container p-8 md:p-10 border-secondary/30 shadow-lg transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl"
             >
               <div className="aspect-[16/10] mb-6 overflow-hidden rounded-lg">
                 <img
@@ -100,14 +110,28 @@ export default function Rituals() {
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                 />
               </div>
-              <h4 className="mb-4 font-headline-md text-3xl md:text-4xl font-semibold text-secondary">
-                {r.title}
-              </h4>
-              <p className="font-body-md text-base leading-relaxed text-on-secondary-container">
+              <div className="mb-4 flex items-center gap-3">
+                {RitualIcon && (
+                  <span className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-secondary/15 text-secondary">
+                    <RitualIcon className="h-5 w-5" strokeWidth={1.75} />
+                  </span>
+                )}
+                <h4 className="font-headline-md text-3xl md:text-4xl font-semibold text-[#7a1f1f]">
+                  {r.title}
+                </h4>
+              </div>
+              <p className="font-body-md text-base leading-relaxed text-on-secondary-container/80">
                 {r.desc}
               </p>
+              {r.date && (
+                <p className="mt-12 flex items-center gap-2 self-end font-label-caps text-sm tracking-[0.25em] text-secondary">
+                  <CalendarHeart className="h-4 w-4" strokeWidth={1.75} />
+                  {r.date}
+                </p>
+              )}
             </div>
-          ))}
+            );
+          })}
         </div>
       </div>
     </Section>

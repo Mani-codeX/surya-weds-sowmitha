@@ -52,7 +52,11 @@ export function useReveal({
       });
     }, el);
     return () => ctx.revert();
-  }, [from, duration, delay, ease, trigger, vars]);
+    // Object props (trigger/vars) default to fresh `{}` each render; depend on
+    // their serialized value so the effect only re-runs when contents change,
+    // not on every parent re-render (which would restart the animation).
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [from, duration, delay, ease, JSON.stringify(trigger), JSON.stringify(vars)]);
   return ref;
 }
 
@@ -84,7 +88,8 @@ export function useStagger({
       });
     }, el);
     return () => ctx.revert();
-  }, [from, stagger, duration, ease, trigger]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [from, stagger, duration, ease, JSON.stringify(trigger)]);
   return ref;
 }
 
@@ -120,7 +125,8 @@ export function useTextReveal({
       );
     }, el);
     return () => ctx.revert();
-  }, [mode, stagger, duration, delay, trigger]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [mode, stagger, duration, delay, JSON.stringify(trigger)]);
   return ref;
 }
 
@@ -141,7 +147,8 @@ export function useImageReveal({ duration = 1.3, trigger = {} } = {}) {
       });
     }, el);
     return () => ctx.revert();
-  }, [duration, trigger]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [duration, JSON.stringify(trigger)]);
   return ref;
 }
 
@@ -169,6 +176,7 @@ export function useParallax({ speed = -80, trigger = {} } = {}) {
       );
     }, el);
     return () => ctx.revert();
-  }, [speed, trigger]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [speed, JSON.stringify(trigger)]);
   return ref;
 }

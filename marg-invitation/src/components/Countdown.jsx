@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Sparkles, Gem } from "../lib/icons";
 
 const TARGET = new Date("2026-07-12T00:00:00").getTime();
 const DAY_MS = 86400000;
@@ -76,7 +77,11 @@ export default function Countdown() {
         <span className="font-display-lg text-3xl italic text-secondary-fixed md:text-4xl">
           {t.phase === "today" ? "Today is the Day" : "Happily Married"}
         </span>
-        <span className="text-2xl">{t.phase === "today" ? "✨" : "💍"}</span>
+        {t.phase === "today" ? (
+          <Sparkles className="h-6 w-6 text-secondary-fixed" />
+        ) : (
+          <Gem className="h-6 w-6 text-secondary-fixed" />
+        )}
       </div>
     );
   }

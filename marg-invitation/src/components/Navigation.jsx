@@ -1,5 +1,6 @@
 import { useLayoutEffect, useRef, useState } from "react";
 import { gsap } from "../lib/gsap";
+import { Menu, X } from "../lib/icons";
 
 const LINKS = [
   { href: "#heritage", label: "Heritage" },
@@ -68,11 +69,7 @@ export default function Navigation() {
         aria-label="Open menu"
         className="fixed top-6 right-6 z-[80] flex h-12 w-12 items-center justify-center rounded-full border border-secondary/40 bg-surface/90 text-primary shadow-lg transition-transform duration-300 hover:scale-105"
       >
-        <span className="flex flex-col items-center justify-center gap-[5px]">
-          <span className="block h-px w-5 bg-primary" />
-          <span className="block h-px w-5 bg-primary" />
-          <span className="block h-px w-3 bg-primary" />
-        </span>
+        <Menu className="h-5 w-5" strokeWidth={1.5} />
       </button>
 
       {/* Fullscreen overlay */}
@@ -91,10 +88,7 @@ export default function Navigation() {
           aria-label="Close menu"
           className="absolute top-6 right-6 flex h-12 w-12 items-center justify-center rounded-full border border-secondary-fixed/40 text-secondary-fixed transition-transform duration-300 hover:rotate-90"
         >
-          <span className="relative block h-5 w-5">
-            <span className="absolute left-1/2 top-1/2 h-px w-5 -translate-x-1/2 -translate-y-1/2 rotate-45 bg-secondary-fixed" />
-            <span className="absolute left-1/2 top-1/2 h-px w-5 -translate-x-1/2 -translate-y-1/2 -rotate-45 bg-secondary-fixed" />
-          </span>
+          <X className="h-5 w-5" strokeWidth={1.5} />
         </button>
 
         <span className="relative mb-10 font-label-caps text-label-caps tracking-[0.4em] text-secondary-fixed">

@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { gsap } from "../lib/gsap";
-import Icon from "./ui/Icon";
+import { Music, VolumeX } from "../lib/icons";
 import trackUrl from "../assets/audio/wedding_music.mp3";
 
 const KEY_ENABLED = "musicEnabled"; // "true" | "false"
@@ -298,7 +298,11 @@ export default function MusicToggle() {
           <span key={i} className="absolute h-1 w-1 rounded-full bg-secondary-fixed opacity-0" />
         ))}
       </span>
-      <Icon name={playing ? "music_note" : "music_off"} className="relative text-xl" />
+      {playing ? (
+        <Music className="relative h-5 w-5" />
+      ) : (
+        <VolumeX className="relative h-5 w-5" />
+      )}
     </button>
   );
 }

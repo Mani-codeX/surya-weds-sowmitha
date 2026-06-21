@@ -2,6 +2,7 @@ import { useLayoutEffect, useRef } from "react";
 import { gsap, ScrollTrigger } from "../lib/gsap";
 import { useResponsive } from "../hooks/useResponsive";
 import HeartCenterpiece from "../components/HeartCenterpiece";
+import { Sprout } from "../lib/icons";
 import { IMG } from "../lib/content";
 
 
@@ -127,8 +128,13 @@ export default function GarlandExchange() {
         </div>
 
         <p className="mx-auto mt-12 md:mt-16 max-w-lg font-body-lg text-base md:text-body-lg text-on-surface-variant">
-          From best friends to soulmates, and now to bride and groom ✨ Every
-          chapter of our story led us to this beautiful forever.
+          From best friends to soulmates, and now to bride and groom
+          <Sprout
+            className="sprout-grow mx-1.5 inline-block h-6 w-6 text-[#c0392b]"
+            strokeWidth={1}
+            aria-hidden="true"
+          />
+          Every chapter of our story led us to this beautiful forever.
         </p>
       </div>
     </section>

@@ -164,18 +164,6 @@ body {
   }
 }
 
-.material-symbols-outlined {
-  font-family: "Material Symbols Outlined";
-  font-weight: normal;
-  font-style: normal;
-  line-height: 1;
-  letter-spacing: normal;
-  text-transform: none;
-  display: inline-block;
-  white-space: nowrap;
-  font-variation-settings: "FILL" 0, "wght" 300, "GRAD" 0, "opsz" 24;
-}
-
 /* ── Lenis ── */
 html.lenis,
 html.lenis body {
@@ -189,6 +177,38 @@ html.lenis body {
 }
 .lenis.lenis-stopped {
   overflow: hidden;
+}
+
+/* Inline sprout accent — "growing" feel: rises from the base (scale-Y up from
+   the bottom) then gently sways. transform + opacity only (60fps). */
+@keyframes sprout-grow {
+  0% {
+    transform: scaleY(0.55) rotate(-8deg);
+    opacity: 0.6;
+  }
+  45% {
+    transform: scaleY(1.08) rotate(4deg);
+    opacity: 1;
+  }
+  70% {
+    transform: scaleY(0.98) rotate(-3deg);
+    opacity: 1;
+  }
+  100% {
+    transform: scaleY(1) rotate(0deg);
+    opacity: 1;
+  }
+}
+.sprout-grow {
+  animation: sprout-grow 3.2s ease-in-out infinite alternate;
+  transform-origin: bottom center;
+  will-change: transform, opacity;
+}
+@media (prefers-reduced-motion: reduce) {
+  .sprout-grow {
+    animation: none;
+    opacity: 1;
+  }
 }
 
 /* ════════════════════════════════════════════════════════════════════

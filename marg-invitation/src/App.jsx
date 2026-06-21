@@ -25,8 +25,8 @@ function App() {
         <Hero />
         <Heritage />
         <GarlandExchange />
-        <Rituals />
         <SaveTheDate />
+        <Rituals />
         <Venue />
         <Blessings />
         <Gallery />
