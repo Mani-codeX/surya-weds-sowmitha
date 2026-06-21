@@ -2,7 +2,6 @@ import { useLayoutEffect, useRef, useState } from "react";
 import { gsap, ScrollTrigger } from "../lib/gsap";
 import Section from "../components/ui/Section";
 import Reveal from "../components/ui/Reveal";
-import Button from "../components/ui/Button";
 import QRCode from "../components/QRCode";
 import ShareDialog from "../components/ShareDialog";
 import { MapPin, Share2 } from "../lib/icons";
@@ -48,76 +47,22 @@ export default function Venue() {
   return (
     <Section id="venue" className="bg-surface-container-low silk-grain">
       <div className="mx-auto max-w-7xl">
-        <div className="flex flex-col items-center gap-12 md:flex-row md:gap-16">
-          {/* ── Narrative ── */}
-          <div className="order-2 flex-1 md:order-1">
+        {/* Mobile: heading → image → details (single column, explicit order).
+            Desktop: 2-col grid — left column = heading + details (rows 1–2),
+            right column = image spanning both rows. */}
+        <div className="grid grid-cols-1 items-center gap-10 md:grid-cols-2 md:gap-16">
+          {/* ── Heading ── */}
+          <div className="order-1 md:col-start-1 md:row-start-1 md:self-end">
             <Reveal as="span" from="fadeUp" className="mb-4 block font-label-caps text-label-caps tracking-[0.3em] text-secondary">
               {VENUE.label}
             </Reveal>
-            <Reveal as="h2" from="fadeUp" delay={0.05} className="mb-7 font-headline-lg text-headline-lg text-primary">
+            <Reveal as="h2" from="fadeUp" delay={0.05} className="font-headline-lg text-3xl leading-tight text-primary md:text-headline-lg">
               {VENUE.heading}
-            </Reveal>
-            <Reveal as="p" from="fadeUp" delay={0.1} className="mb-10 max-w-xl font-body-lg text-body-lg leading-relaxed text-on-surface-variant">
-              {VENUE.description}
-            </Reveal>
-
-            {/* Venue name + address — elegant serif, name prestigious, address
-                lighter so the hierarchy reads name → address at a glance. */}
-            <Reveal from="fadeUp" delay={0.15} className="border-l-2 border-secondary/40 pl-5">
-              <div className="mb-2 flex items-center gap-2 text-secondary">
-                <MapPin className="h-4 w-4" strokeWidth={1.75} />
-                <span className="font-label-caps text-[0.65rem] tracking-[0.3em]">THE LOCATION</span>
-              </div>
-              <h5 className="font-headline-md text-2xl leading-snug text-primary md:text-3xl">
-                {VENUE.name}
-              </h5>
-              <address className="mt-3 not-italic font-quote text-lg leading-relaxed text-on-surface-variant/75">
-                {VENUE.address.map((line) => (
-                  <span key={line} className="block">
-                    {line}
-                  </span>
-                ))}
-              </address>
-            </Reveal>
-
-            {/* CTAs — directions (primary) + share (secondary). Side by side on
-                desktop, stacked full-width on mobile. */}
-            <Reveal from="fadeUp" delay={0.2} className="mt-10 flex flex-col gap-4 sm:flex-row">
-              <Button
-                as="a"
-                href={VENUE.directionsUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                variant="primary"
-                className="flex w-full items-center justify-center gap-3 px-9 py-4 tracking-widest hover:bg-secondary sm:w-auto"
-              >
-                <MapPin className="h-5 w-5" strokeWidth={2} />
-                GET DIRECTIONS
-              </Button>
-              <div className="relative w-full sm:w-auto">
-                <Button
-                  as="button"
-                  type="button"
-                  onClick={() => setShareOpen((v) => !v)}
-                  variant="secondary"
-                  aria-expanded={shareOpen}
-                  className="flex w-full items-center justify-center gap-3 px-9 py-4 tracking-widest sm:w-auto"
-                >
-                  <Share2 className="h-5 w-5" strokeWidth={1.75} />
-                  SHARE LOCATION
-                </Button>
-                <ShareDialog
-                  open={shareOpen}
-                  onClose={() => setShareOpen(false)}
-                  shareText={VENUE_SHARE_MESSAGE}
-                  mapUrl={VENUE.mapUrl}
-                />
-              </div>
             </Reveal>
           </div>
 
           {/* ── Framed image + scannable QR card ── */}
-          <div className="order-1 w-full flex-1 md:order-2">
+          <div className="order-2 w-full md:col-start-2 md:row-span-2 md:row-start-1">
             <div className="relative border border-outline-variant p-3 sm:p-4">
               <div ref={imgRef} className="aspect-square overflow-hidden">
                 <img
@@ -155,6 +100,65 @@ export default function Venue() {
                 </span>
               </div>
             </div>
+          </div>
+
+          {/* ── Details: description, address, CTAs ── */}
+          <div className="order-3 md:col-start-1 md:row-start-2 md:self-start">
+            <Reveal as="p" from="fadeUp" delay={0.1} className="mb-7 max-w-xl font-body-lg text-sm leading-relaxed text-on-surface-variant md:text-body-lg">
+              {VENUE.description}
+            </Reveal>
+
+            {/* Venue name + address — elegant serif, name prestigious, address
+                lighter so the hierarchy reads name → address at a glance. */}
+            <Reveal from="fadeUp" delay={0.15} className="border-l-2 border-secondary/40 pl-5">
+              <div className="mb-2 flex items-center gap-2 text-secondary">
+                <MapPin className="h-4 w-4" strokeWidth={1.75} />
+                <span className="font-label-caps text-[0.65rem] tracking-[0.3em]">THE LOCATION</span>
+              </div>
+              <h5 className="font-headline-md text-xl leading-snug text-primary md:text-3xl">
+                {VENUE.name}
+              </h5>
+              <address className="mt-3 not-italic font-quote text-base leading-relaxed text-on-surface-variant/75 md:text-lg">
+                {VENUE.address.map((line) => (
+                  <span key={line} className="block">
+                    {line}
+                  </span>
+                ))}
+              </address>
+            </Reveal>
+
+            {/* CTAs — directions (primary) + share (secondary). Side by side on
+                desktop, stacked full-width on mobile. */}
+            <Reveal from="fadeUp" delay={0.2} className="mt-7 flex flex-col gap-3.5 sm:flex-row">
+              {/* Primary — solid maroon, gold sweep on hover */}
+              <a
+                href={VENUE.directionsUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="cta-btn group flex w-full items-center justify-center gap-3 bg-primary px-9 py-4 font-label-caps text-label-caps tracking-widest text-on-primary shadow-[0_10px_30px_rgba(74,4,4,0.25)] hover:shadow-[0_16px_40px_rgba(74,4,4,0.35)] sm:w-auto"
+              >
+                <MapPin className="cta-icon h-5 w-5" strokeWidth={2} />
+                GET DIRECTIONS
+              </a>
+              {/* Secondary — gold outline that fills with gold on hover */}
+              <div className="relative w-full sm:w-auto">
+                <button
+                  type="button"
+                  onClick={() => setShareOpen((v) => !v)}
+                  aria-expanded={shareOpen}
+                  className="cta-btn group flex w-full items-center justify-center gap-3 border border-secondary bg-transparent px-9 py-4 font-label-caps text-label-caps tracking-widest text-secondary hover:bg-secondary hover:text-on-secondary sm:w-auto"
+                >
+                  <Share2 className="cta-icon h-5 w-5" strokeWidth={1.75} />
+                  SHARE LOCATION
+                </button>
+                <ShareDialog
+                  open={shareOpen}
+                  onClose={() => setShareOpen(false)}
+                  shareText={VENUE_SHARE_MESSAGE}
+                  mapUrl={VENUE.mapUrl}
+                />
+              </div>
+            </Reveal>
           </div>
         </div>
       </div>

@@ -109,11 +109,11 @@ export default function Heritage() {
             A LOVE STORY
           </Reveal>
 
-          <h2 ref={headingRef} className="font-headline-lg text-headline-lg text-primary">
+          <h2 ref={headingRef} className="font-headline-lg text-3xl leading-tight text-primary md:text-headline-lg">
             When Friendship Became Forever
           </h2>
 
-          <Reveal as="p" from="fadeUp" delay={0.1} className="font-body-lg text-body-lg text-on-surface-variant">
+          <Reveal as="p" from="fadeUp" delay={0.1} className="font-body-lg text-sm leading-relaxed text-on-surface-variant md:text-body-lg">
             It all began on Friendship Day, the first Sunday of August 2017. What
             started as a beautiful friendship grew stronger with each passing day,
             and somewhere along the way, friendship blossomed into love. Through

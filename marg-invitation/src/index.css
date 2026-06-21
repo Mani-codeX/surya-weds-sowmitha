@@ -179,6 +179,64 @@ html.lenis body {
   overflow: hidden;
 }
 
+/* ── Cinematic venue CTA buttons ──
+   A premium pill button with a gold light-sweep on hover, a lift, and an icon
+   that nudges forward. transform + opacity only (60fps). */
+.cta-btn {
+  position: relative;
+  overflow: hidden;
+  border-radius: 9999px;
+  transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1),
+    box-shadow 0.4s ease, background-color 0.4s ease, color 0.4s ease,
+    border-color 0.4s ease;
+  will-change: transform;
+}
+.cta-btn::before {
+  /* diagonal light sweep that glides across on hover only */
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    115deg,
+    transparent 30%,
+    rgba(255, 255, 255, 0.35) 50%,
+    transparent 70%
+  );
+  transform: translateX(-120%);
+  transition: transform 0.7s cubic-bezier(0.2, 0.8, 0.2, 1);
+  pointer-events: none;
+}
+.cta-btn:hover {
+  transform: translateY(-3px);
+}
+.cta-btn:hover::before {
+  transform: translateX(120%);
+}
+.cta-btn > * {
+  position: relative;
+  z-index: 1;
+}
+.cta-btn .cta-icon {
+  transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.cta-btn:hover .cta-icon {
+  transform: translateX(3px) scale(1.08);
+}
+@media (prefers-reduced-motion: reduce) {
+  .cta-btn,
+  .cta-btn::before,
+  .cta-btn .cta-icon {
+    transition: none;
+    animation: none;
+  }
+  .cta-btn::before {
+    display: none;
+  }
+  .cta-btn:hover {
+    transform: none;
+  }
+}
+
 /* Inline sprout accent — "growing" feel: rises from the base (scale-Y up from
    the bottom) then gently sways. transform + opacity only (60fps). */
 @keyframes sprout-grow {

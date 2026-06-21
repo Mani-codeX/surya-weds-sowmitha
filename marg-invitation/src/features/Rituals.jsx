@@ -86,7 +86,7 @@ export default function Rituals() {
           <Reveal as="span" from="fadeUp" className="font-label-caps text-label-caps text-secondary-fixed mb-4 inline-block">
             THE CELEBRATIONS
           </Reveal>
-          <Reveal as="h2" from="fadeUp" delay={0.05} className="font-headline-lg text-headline-lg text-on-primary">
+          <Reveal as="h2" from="fadeUp" delay={0.05} className="font-headline-lg text-3xl leading-tight text-on-primary md:text-headline-lg">
             From Promise to Forever
           </Reveal>
         </div>
@@ -110,22 +110,22 @@ export default function Rituals() {
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                 />
               </div>
-              <div className="mb-4 flex items-center gap-3">
+              <div className="mb-3 flex items-center gap-2.5 md:mb-4 md:gap-3">
                 {RitualIcon && (
-                  <span className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-secondary/15 text-secondary">
-                    <RitualIcon className="h-5 w-5" strokeWidth={1.75} />
+                  <span className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-secondary/15 text-secondary md:h-11 md:w-11">
+                    <RitualIcon className="h-4 w-4 md:h-5 md:w-5" strokeWidth={1.75} />
                   </span>
                 )}
-                <h4 className="font-headline-md text-3xl md:text-4xl font-semibold text-[#7a1f1f]">
+                <h4 className="font-headline-md text-2xl font-semibold text-[#7a1f1f] md:text-4xl">
                   {r.title}
                 </h4>
               </div>
-              <p className="font-body-md text-base leading-relaxed text-on-secondary-container/80">
+              <p className="font-body-md text-sm leading-relaxed text-on-secondary-container/80 md:text-base">
                 {r.desc}
               </p>
               {r.date && (
-                <p className="mt-12 flex items-center gap-2 self-end font-label-caps text-sm tracking-[0.25em] text-secondary">
-                  <CalendarHeart className="h-4 w-4" strokeWidth={1.75} />
+                <p className="mt-8 flex items-center gap-2 self-end font-label-caps text-xs tracking-[0.25em] text-secondary md:mt-12 md:text-sm">
+                  <CalendarHeart className="h-3.5 w-3.5 md:h-4 md:w-4" strokeWidth={1.75} />
                   {r.date}
                 </p>
               )}
