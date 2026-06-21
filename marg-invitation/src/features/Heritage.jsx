@@ -5,7 +5,9 @@ import { useResponsive } from "../hooks/useResponsive";
 import Section from "../components/ui/Section";
 import Reveal from "../components/ui/Reveal";
 import { useImageReveal } from "../hooks/useAnimations";
-import { IMG } from "../lib/content";
+import ProtectedImage from "../components/ProtectedImage";
+import { WED_IMG } from "../lib/weddingImages";
+import { COUPLE } from "../lib/content";
 
 const MILESTONES = [
   { year: "2017", label: "Friendship Day" },
@@ -31,7 +33,35 @@ export default function Heritage() {
   const headingRef = useRef(null);
   const tlLineRef = useRef(null);
   const tlStopsRef = useRef(null);
+  const badgeRef = useRef(null);
   const { prefersReducedMotion } = useResponsive();
+
+  // The names badge springs in only AFTER the image reveal wipe completes.
+  useLayoutEffect(() => {
+    const el = badgeRef.current;
+    if (!el) return;
+    if (prefersReducedMotion) {
+      gsap.set(el, { autoAlpha: 1, scale: 1, y: 0 });
+      return;
+    }
+    const ctx = gsap.context(() => {
+      gsap.fromTo(
+        el,
+        { autoAlpha: 0, scale: 0.82, y: 24 },
+        {
+          autoAlpha: 1,
+          scale: 1,
+          y: 0,
+          duration: 0.7,
+          ease: "back.out(1.8)",
+          delay: 1.15, // wait for the image clip-path wipe (~1.3s)
+          scrollTrigger: { trigger: imgRef.current, start: "top 80%", once: true },
+        }
+      );
+    }, el);
+    ScrollTrigger.refresh();
+    return () => ctx.revert();
+  }, [prefersReducedMotion, imgRef]);
 
   useLayoutEffect(() => {
     const root = narrativeRef.current;
@@ -89,16 +119,35 @@ export default function Heritage() {
             ref={imgRef}
             className="aspect-[3/4] overflow-hidden rounded-lg shadow-2xl border-4 border-secondary/20 grayscale-[0.2]"
           >
-            <img
-              src={IMG.heritage}
-              alt="Intricate Thanjavur painting with gold foil"
+            <ProtectedImage
+              src={WED_IMG.img2}
+              alt="Sowmitha & Surya"
               className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000"
             />
           </div>
-          <div className="absolute -bottom-8 -right-8 w-48 h-48 bg-primary-container p-6 rounded-lg text-on-primary shadow-xl hidden md:block">
-            <p className="font-label-caps text-xs tracking-widest mb-4">ESTD. 2026</p>
-            <p className="font-headline-md text-xl leading-tight">
-              Carrying forward the Chola Legacy
+          {/* Luxury wedding monogram seal — faux-glass (NO backdrop-filter, per
+              the perf rules): layered translucent gradient + thin gold border +
+              soft shadow + premium gold typography. */}
+          {/* Luxury wedding monogram seal — faux-glass (NO backdrop-filter, per
+              the perf rules): layered translucent gradient + thin gold border +
+              soft shadow + premium gold typography. */}
+          <div
+            ref={badgeRef}
+            className="invisible absolute -bottom-7 -right-7 hidden h-40 w-40 flex-col items-center justify-center rounded-xl border border-secondary-fixed/50 bg-primary-container/90 p-4 text-center shadow-[0_18px_44px_rgba(74,4,4,0.45)] md:flex"
+            style={{
+              backgroundImage:
+                "linear-gradient(135deg, rgba(233,193,118,0.18), transparent 55%), linear-gradient(315deg, rgba(233,193,118,0.10), transparent 50%)",
+            }}
+          >
+            {/* inset hairline frame for a sealed look */}
+            <span className="pointer-events-none absolute inset-1.5 rounded-lg border border-secondary-fixed/25" />
+
+            <span className="font-display-lg text-5xl leading-none text-secondary-fixed [text-shadow:0_2px_10px_rgba(0,0,0,0.35)]">
+              {COUPLE.initials}
+            </span>
+            <span className="mt-3 h-px w-8 bg-secondary-fixed/50" />
+            <p className="mt-3 font-label-caps text-[0.6rem] tracking-[0.25em] text-secondary-fixed/90">
+              12 • 07 • 2026
             </p>
           </div>
         </div>

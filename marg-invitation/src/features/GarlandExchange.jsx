@@ -2,8 +2,9 @@ import { useLayoutEffect, useRef } from "react";
 import { gsap, ScrollTrigger } from "../lib/gsap";
 import { useResponsive } from "../hooks/useResponsive";
 import HeartCenterpiece from "../components/HeartCenterpiece";
+import ProtectedImage from "../components/ProtectedImage";
 import { Sprout } from "../lib/icons";
-import { IMG } from "../lib/content";
+import { WED_IMG } from "../lib/weddingImages";
 
 
 export default function GarlandExchange() {
@@ -85,7 +86,7 @@ export default function GarlandExchange() {
     >
       <div className="absolute inset-0 kolam-bg opacity-30" />
       <div ref={contentRef} className="w-full max-w-6xl px-mobile-margin md:px-container-padding text-center">
-        <h3 className="font-headline-lg text-3xl md:text-headline-lg text-primary mb-12 md:mb-20">
+        <h3 className="font-headline-lg text-3xl md:text-headline-lg text-primary mb-6 md:mb-10">
           From Friendship to Forever
         </h3>
 
@@ -95,7 +96,7 @@ export default function GarlandExchange() {
           {/* Groom */}
           <div ref={groomRef} className="relative z-10 will-change-transform">
             <div className="w-[36vw] max-w-[220px] sm:max-w-[250px] md:w-72 md:max-w-none aspect-[3/4.4] overflow-hidden rounded-t-full border-2 border-secondary/50 p-1">
-              <img src={IMG.groom} alt="Surya" className="w-full h-full object-cover" />
+              <ProtectedImage src={WED_IMG.birdOne} alt="Surya" className="w-full h-full rounded-t-full object-cover object-top" />
             </div>
             <p className="mt-3 md:mt-4 font-label-caps text-xs sm:text-sm md:text-base tracking-[0.2em] text-secondary">
               SURYA
@@ -119,7 +120,7 @@ export default function GarlandExchange() {
           {/* Bride */}
           <div ref={brideRef} className="relative z-10 will-change-transform">
             <div className="w-[36vw] max-w-[220px] sm:max-w-[250px] md:w-72 md:max-w-none aspect-[3/4.4] overflow-hidden rounded-t-full border-2 border-secondary/50 p-1">
-              <img src={IMG.bride} alt="Sowmitha" className="w-full h-full object-cover" />
+              <ProtectedImage src={WED_IMG.birdTwo} alt="Sowmitha" className="w-full h-full rounded-t-full object-cover object-top" />
             </div>
             <p className="mt-3 md:mt-4 font-label-caps text-xs sm:text-sm md:text-base tracking-[0.2em] text-secondary">
               SOWMITHA

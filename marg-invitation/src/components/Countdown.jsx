@@ -88,7 +88,7 @@ export default function Countdown() {
 
   return (
     <div className="flex flex-col items-center gap-5">
-      <span className="font-label-caps text-label-caps tracking-[0.3em] text-surface-container-lowest/80">
+      <span className="whitespace-nowrap font-label-caps text-[0.6rem] tracking-[0.2em] text-surface-container-lowest/80 sm:text-label-caps sm:tracking-[0.3em] [text-shadow:0_2px_12px_rgba(0,0,0,0.6)]">
         COUNTING DOWN TO FOREVER
       </span>
       <div className="flex items-center justify-center gap-3 md:gap-5">

@@ -77,27 +77,17 @@ export const RITUALS = [
   },
 ];
 
+// Gallery uses the local wedding photos by key (see weddingImages.js). The
+// span controls the bento layout; the key resolves to a WebP via WED_IMG.
+// Mobile (2-col): img3 big → img7 + img6 (2-up row) → img5 big.
+// Desktop (4-col bento): img3 (2x2) · img7 · img5 (tall) · img6 — kept identical
+// via md: spans + md:order. DOM order is the desktop order; mobile swaps
+// img5↔img6 with order-* so img5 lands last.
 export const GALLERY = [
-  {
-    span: "col-span-2 row-span-2",
-    img: "https://lh3.googleusercontent.com/aida-public/AB6AXuA3bOmdTqEZI0htTo_pxJAS_0Q1ZrQwMQUazZtXiDLDBOjdhvY2bCz8Cibq2oeDWHWYZH2vE973EPJ9HqrFZEgegNto4amyGoD7wYZSB0BGrkrgfUrOOQoBuJjMZJy1HXkVMMhXK8PqIjA_IlJQlhpM1clIygz63KXB48uSUTjBhny1r8YbMNwNY_H1bEIH-BkIGF6MNx3uH2PrCnBYbtWOSZfnQD_TxpI9pAwU1T5enei9YZwJB3qlBQhlaNvDXEBgpJEXGbWFO2Q",
-  },
-  {
-    span: "",
-    img: "https://lh3.googleusercontent.com/aida-public/AB6AXuBWZpytA3wUdiy9Q01It45HclQ48s_mZUAmbVzgfHoKI9L9GAKyLmLEo6BCmPhDt7PF49-_r94MMrMHD5s3NiaYeGVR70tD1DxSL-D9RdB3JxetK3Ymrsxzobs4V9RWEhPM4--oiXEXEdu4dPsft7L5UZZ96_9TdBw0D1uihoa78Y_JWC6jgAFtNI_z1xe7O90kp38LoerGYbxlNzNI1C9TnEiggyAgXvkhbp_xlYIJ_LlCumJ6_U1QdT-QAFvVE1sltntjJZz8mBk",
-  },
-  {
-    span: "row-span-2",
-    img: "https://lh3.googleusercontent.com/aida-public/AB6AXuDoki6_hV7zk4ku6xu42voxq2VXbyHfcphPQRuelxQ3yoaHCDtgyY9kWZtUn-xk07Pvuxw5Mtwj7frXwFGVBPlDlT0HKRDos9Geu5gW8RlR8heqQui-qsZszmGBVKVspJq1cz64tXetyImngN4zhM0plWeCse-kKUrI-WCRt7WbvNwPsiWpFFg0DEhExyAqgjdIYe9hwAw_X1kquN_iumpaSysf8n3VACWWatxiYxDozIoTy_eLBJ3MbP6mMH8kkbtLStEczFRBr-g",
-  },
-  {
-    span: "",
-    img: "https://lh3.googleusercontent.com/aida-public/AB6AXuAvQ2F-TpWsrkHRwDGygMSocggnWoFJD9Eu7y9v9Arjdv5cDTNDR2BO5BCuLCNMDCBJXiv9yBnfbKWX3b5cyvFNtNhj4qe1OTZmYPHfyiQ8icTDtzVjppJ3j6Q13GNsELVLbERLSCkzJZNk--WDFcyf7SKMBzuqzR033ZawubWAjwQYLf1ZU4utG-s2xE4JDVgw_A3JzUifKCb-L8mm6LLmu62BA5FSN9xmxq-OUOcm25BnwPF1deHhlqDp6zYwzLGioh3HO6fNxBo",
-  },
-  {
-    span: "col-span-2",
-    img: "https://lh3.googleusercontent.com/aida-public/AB6AXuDISoH-MiQu9JnhnUdtc7H4oniHh2qZjmS4Qpk8vSoQ_PyylvXNi_AyUdkG6DPNzeAFL5nWgGAj0vlrqnZlGk2SSDjaD4w2zqI7bBfoBhqOybpsPc651Yq2LDMyQkoWAjwZrRiaUvguGGBpnpkRIx9XH6aa0k9kNwY5tDd__Cik2ZRsGpqaiKqn-HnAJZZOU2pU5LeocaZ31i9AiOf5v9jiMQQFtPBkxmwursbCoEy2g0HKLibuF5WU4h_Z7MFt4CXcwYIpbTi68W0",
-  },
+  { span: "col-span-2 row-span-2", order: "order-1", key: "img3" },
+  { span: "col-span-1 row-span-1", order: "order-2", key: "img7", position: "center 30%", zoom: true },
+  { span: "col-span-2 row-span-2 md:col-span-1", order: "order-4 md:order-3", key: "img5", position: "center top" },
+  { span: "col-span-1 row-span-1", order: "order-3 md:order-4", key: "img6" },
 ];
 
 export const BLESSINGS = [

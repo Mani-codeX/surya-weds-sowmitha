@@ -4,16 +4,9 @@ import ScratchCard from "../components/ScratchCard";
 import HeartCenterpiece from "../components/HeartCenterpiece";
 import Countdown from "../components/Countdown";
 import MarriedMessage from "../components/MarriedMessage";
-import { IMG } from "../lib/content";
+import ProtectedImage from "../components/ProtectedImage";
+import { WED_IMG } from "../lib/weddingImages";
 
-const GoldMotif = ({ className = "" }) => (
-  <svg className={className} fill="none" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-    <path
-      d="M50 0C50 27.6142 27.6142 50 0 50C27.6142 50 50 72.3858 50 100C50 72.3858 72.3858 50 100 50C72.3858 50 50 27.6142 50 0Z"
-      fill="currentColor"
-    />
-  </svg>
-);
 
 // Wedding day = 12 July 2026. Phases:
 //   "before"  : up to & including 10 July  → scratch card
@@ -76,7 +69,7 @@ export default function SaveTheDate() {
   }, [phase]);
 
   return (
-    <section className="relative flex h-screen items-center justify-center overflow-hidden">
+    <section className="relative flex h-screen items-center justify-center overflow-hidden md:justify-start md:pl-[2%] lg:pl-[4%]">
       {/* DEV TEST SEGMENT — preview each date phase. Remove after testing. */}
       <div className="absolute left-4 top-4 z-50 flex overflow-hidden rounded-full border border-secondary-fixed/40 text-[0.65rem]">
         {[
@@ -102,30 +95,66 @@ export default function SaveTheDate() {
       </div>
 
       <div className="absolute inset-0 z-0">
-        <img src={IMG.saveTheDate} alt="Ancient stone temple corridor" className="h-full w-full object-cover" />
-        <div className="absolute inset-0 bg-primary/60" />
+        <ProtectedImage
+          src={WED_IMG.img1}
+          alt="Surya & Sowmitha"
+          className="h-full w-full object-cover"
+          style={{ objectPosition: "70% center" }}
+        />
+        <div className="absolute inset-0 bg-primary/45" />
+        {/* page-wide cinematic shadow — darker on the LEFT (behind the date /
+            card) fading to clear on the right, so the typography floats on a
+            soft shadow while the couple stays lit. Desktop only — on mobile the
+            composition is centred, so a centred vignette is used instead. */}
+        <div
+          className="absolute inset-0 hidden md:block"
+          style={{
+            background:
+              "linear-gradient(to right, rgba(20,4,4,0.78) 0%, rgba(20,4,4,0.45) 32%, transparent 58%)",
+          }}
+        />
+        <div
+          className="absolute inset-0 md:hidden"
+          style={{
+            background:
+              "radial-gradient(ellipse 75% 55% at 50% 42%, rgba(20,4,4,0.55), transparent 75%)",
+          }}
+        />
       </div>
 
-      {/* Bordered glass panel — richer gold border + soft outer shadow */}
-      <div className="relative z-10 mx-auto flex w-[min(92vw,560px)] flex-col items-center gap-8 rounded-[2.5rem] border border-secondary-fixed/30 bg-primary/40 px-10 py-16 text-center shadow-[0_20px_60px_rgba(0,0,0,0.45)]">
-        <GoldMotif className="h-7 w-7 text-secondary-fixed/70" />
-
+      {/* Floating cinematic composition — NO card, NO border, NO box. The date
+          and countdown sit as elegant typography directly on the photograph;
+          readability comes from soft text shadows + a gentle golden light that
+          lives only behind the focal date (added below), not a panel. */}
+      <div className="relative z-10 flex w-[min(90vw,440px)] flex-col items-center gap-5 px-4 py-16 text-center sm:px-6 md:-translate-y-14">
         {/* ── MARRIED (Jul 13+) ── */}
         {phase === "married" && <MarriedMessage />}
 
         {/* ── WEDDING DAY (Jul 11–12) — date shown directly, no scratch ── */}
         {phase === "wedding" && (
           <div ref={directRef} className="flex flex-col items-center gap-7">
-            <span data-rise className="font-label-caps text-label-caps tracking-[0.5em] text-secondary-fixed-dim">
+            <span data-rise className="font-label-caps text-label-caps tracking-[0.5em] text-secondary-fixed-dim [text-shadow:0_2px_12px_rgba(0,0,0,0.6)]">
               THE DAY HAS ARRIVED
             </span>
-            <h2 data-rise className="font-display-lg text-5xl leading-none text-secondary-fixed md:text-6xl [text-shadow:0_4px_24px_rgba(0,0,0,0.5)]">
-              12 • 07 • 26
-            </h2>
+            <div data-rise className="relative">
+              {/* gentle golden light behind the focal date — readability without
+                  a box */}
+              <span
+                className="pointer-events-none absolute left-1/2 top-1/2 -z-10 h-32 w-[110%] -translate-x-1/2 -translate-y-1/2"
+                style={{
+                  background:
+                    "radial-gradient(ellipse, rgba(233,193,118,0.22), transparent 70%)",
+                }}
+                aria-hidden="true"
+              />
+              <h2 className="whitespace-nowrap font-display-lg text-4xl leading-none text-secondary-fixed sm:text-5xl md:text-7xl [text-shadow:0_4px_30px_rgba(0,0,0,0.7),0_2px_10px_rgba(0,0,0,0.6)]">
+                12 • 07 • 26
+              </h2>
+            </div>
             <div data-rise>
               <HeartCenterpiece />
             </div>
-            <span data-rise className="font-display-lg text-2xl italic text-secondary-fixed md:text-3xl">
+            <span data-rise className="font-display-lg text-2xl italic text-secondary-fixed md:text-3xl [text-shadow:0_2px_16px_rgba(0,0,0,0.6)]">
               Today is the Day ✨
             </span>
           </div>
@@ -134,7 +163,7 @@ export default function SaveTheDate() {
         {/* ── BEFORE (≤ Jul 10) — scratch to reveal ── */}
         {phase === "before" && (
           <>
-            <span className="border-y border-secondary/40 py-3 font-label-caps text-label-caps tracking-[0.5em] text-secondary-fixed-dim">
+            <span className="font-label-caps text-label-caps tracking-[0.5em] text-secondary-fixed-dim [text-shadow:0_2px_12px_rgba(0,0,0,0.6)]">
               SAVE THE DATE
             </span>
 
@@ -157,7 +186,7 @@ export default function SaveTheDate() {
                 onComplete={onScratchDone}
                 className="relative inline-block"
               >
-                <h2 ref={dateRef} className="relative z-10 px-12 py-8 font-display-lg text-4xl leading-none text-secondary-fixed md:text-5xl [text-shadow:0_4px_24px_rgba(0,0,0,0.5)]">
+                <h2 ref={dateRef} className="relative z-10 whitespace-nowrap px-8 py-4 font-display-lg text-4xl leading-none text-secondary-fixed sm:px-12 sm:text-5xl md:text-6xl [text-shadow:0_4px_30px_rgba(0,0,0,0.7),0_2px_10px_rgba(0,0,0,0.6)]">
                   12 • 07 • 26
                 </h2>
                 {/* smooth light sweep gliding across the capsule (elegant, no
@@ -183,8 +212,6 @@ export default function SaveTheDate() {
             )}
           </>
         )}
-
-        <GoldMotif className="h-7 w-7 text-secondary-fixed/70" />
       </div>
     </section>
   );

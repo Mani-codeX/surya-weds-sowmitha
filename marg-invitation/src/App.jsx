@@ -23,8 +23,8 @@ function App() {
 
       <main className="relative z-10 overflow-hidden silk-grain">
         <Hero />
-        <Heritage />
         <GarlandExchange />
+        <Heritage />
         <SaveTheDate />
         <Rituals />
         <Venue />
