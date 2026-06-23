@@ -21,6 +21,7 @@ export default function Hero() {
   const rootRef = useRef(null);
   const eyebrowRef = useRef(null);
   const namesRef = useRef(null);
+  const shineRef = useRef(null);
   const ampRef = useRef(null);
   const glowRef = useRef(null);
   const quoteRef = useRef(null);
@@ -36,40 +37,68 @@ export default function Hero() {
 
     const ctx = gsap.context(() => {
       const names = namesRef.current;
+      const shine = shineRef.current;
       const amp = ampRef.current;
 
-      // Gold-foil gradient for the title: base burgundy with a narrow warm-gold
-      // highlight band centred in the gradient. Sliding background-position
-      // makes that gold highlight glide across the LETTERS (background-clip:text)
-      // — gold lettering catching light. Re-asserted up front so a re-run never
-      // inherits a leftover settled state.
-      const GRAD =
-        "linear-gradient(100deg, var(--color-primary) 0%, var(--color-primary) 42%, #c9a24b 47%, #ffe9c2 50%, #c9a24b 53%, var(--color-primary) 58%, var(--color-primary) 100%)";
-      const armGradient = () => {
-        names.style.backgroundImage = GRAD;
-        names.style.backgroundSize = "400% 100%";
-        names.style.backgroundPosition = "240% center";
-        names.style.webkitBackgroundClip = "text";
-        names.style.backgroundClip = "text";
-        names.style.webkitTextFillColor = "transparent";
-        names.style.color = "transparent";
+      // The LETTERS (namesRef) are always solid burgundy and never animate their
+      // fill — they can never "disappear". The gold glint lives entirely on the
+      // overlay copy (shineRef): it's filled with a gold gradient and clipped to
+      // its own text, then REVEALED only inside a soft vertical band via an
+      // animated mask. Sliding the mask makes a gold highlight travel across the
+      // names exactly once, then rest on the &. Burgundy text underneath stays
+      // put the whole time.
+      const GOLD =
+        "linear-gradient(160deg, #fff3d0 0%, #f4d27a 22%, #d4af37 50%, #b8860b 74%, #8a6508 100%)";
+      // Soft glint band centred on --x (a 0..1 fraction of the title width).
+      // Opaque (white) at the centre, feathering to transparent ±14% either
+      // side — so only a soft vertical strip of the gold overlay shows, and it
+      // moves as --x changes. Outside the band the overlay is fully transparent.
+      const BAND =
+        "linear-gradient(90deg, transparent calc(var(--x) * 100% - 14%), #fff calc(var(--x) * 100%), transparent calc(var(--x) * 100% + 14%))";
+
+      const armShine = () => {
+        shine.style.backgroundImage = GOLD;
+        shine.style.webkitBackgroundClip = "text";
+        shine.style.backgroundClip = "text";
+        shine.style.webkitTextFillColor = "transparent";
+        shine.style.color = "transparent";
+        shine.style.setProperty("--x", "-0.3"); // band starts off the left edge
+        shine.style.webkitMaskImage = BAND;
+        shine.style.maskImage = BAND;
+        shine.style.webkitMaskRepeat = "no-repeat";
+        shine.style.maskRepeat = "no-repeat";
+        shine.style.opacity = "1";
       };
-      // After the passes (the highlight is resting ON the &): names → solid
-      // burgundy, & → permanent gold. We swap at peak brightness then gently
-      // relax it, so the light "fades" onto the & with no hard cut.
+
+      // The & centre as a 0..1 fraction of the title width — where the glint must
+      // rest. Measured live so it's exact on mobile (stacked) and desktop (one
+      // line); re-measurable after the display font loads.
+      const ampRestFrac = () => {
+        if (!amp) return 0.5;
+        const titleBox = names.getBoundingClientRect();
+        const ampBox = amp.getBoundingClientRect();
+        if (!titleBox.width) return 0.5;
+        return (ampBox.left + ampBox.width / 2 - titleBox.left) / titleBox.width;
+      };
+
+      // Once the glint rests on the &: lock the & to PERMANENT gold first (so it
+      // never blinks back to burgundy), THEN gently fade out the moving overlay.
+      // The overlay's GOLD gradient is identical to .hero-amp-settled, so the
+      // handoff is seamless — the glint resting on the & simply becomes the
+      // permanent gold &. The rest of the names quietly return to burgundy as
+      // the overlay fades.
       const settle = () => {
-        names.style.backgroundImage = "none";
-        names.style.webkitBackgroundClip = "border-box";
-        names.style.backgroundClip = "border-box";
-        names.style.webkitTextFillColor = "var(--color-primary)";
-        names.style.color = "var(--color-primary)";
-        if (!amp) return;
-        amp.classList.add("hero-amp-settled"); // permanent gold &
-        gsap.fromTo(
-          amp,
-          { filter: "brightness(1.2)" },
-          { filter: "brightness(1)", duration: 1.2, ease: "sine.out" }
-        );
+        if (amp) {
+          amp.classList.add("hero-amp-settled"); // permanent gold & (stays gold forever)
+          gsap.fromTo(
+            amp,
+            { filter: "brightness(1.25)" },
+            { filter: "brightness(1)", duration: 1.2, ease: "sine.out" }
+          );
+        }
+        if (shine) {
+          gsap.to(shine, { opacity: 0, duration: 0.6, ease: "sine.out" });
+        }
       };
 
       if (prefersReducedMotion) {
@@ -81,37 +110,47 @@ export default function Hero() {
         return;
       }
 
-      armGradient();
+      armShine();
+
+      // Where the glint rests (& centre fraction). Mutable so the font-ready
+      // callback can correct it before Pass 2 begins.
+      const rest = { frac: ampRestFrac() };
 
       const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
 
       // background glow + eyebrow
       tl.fromTo(glowRef.current, { opacity: 0, scale: 0.85 }, { opacity: 1, scale: 1, duration: 1.6, ease: "power2.out" }, 0)
         .fromTo(eyebrowRef.current, { opacity: 0, y: 18 }, { opacity: 1, y: 0, duration: 0.9 }, 0.1)
-        // title fades in
+        // title fades in (burgundy letters, always solid)
         .fromTo(names, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 1, ease: "power3.out" }, 0.3)
-        // GOLD-FOIL SHINE — TWO slow L→R passes. Pass 1 crosses the whole title
-        // and exits; Pass 2 comes back in and decelerates to rest on the centred
-        // & (slow), where it fades into the settled state. ONE keyframes tween
-        // (StrictMode-safe), off-screen edges so the reset is invisible (no
-        // flash). Only background-position animates.
-        .to(
-          names,
+        // GOLD GLINT — ONE smooth sweep that travels across the names and
+        // decelerates to rest ON the &. Driving the --x CSS var (0..1 across the
+        // title) moves the masked band; the letters underneath never change.
+        .fromTo(
+          shine,
+          { "--x": -0.3 },
           {
-            keyframes: [
-              { backgroundPosition: "-160% center", duration: 2.6, ease: "power1.inOut" }, // PASS 1 — full L→R, slow
-              { backgroundPosition: "240% center", duration: 0 },                          // invisible reset off-left
-              { backgroundPosition: "50% center", duration: 3.0, ease: "power2.out" },      // PASS 2 — L→R, slow, rest on the &
-            ],
+            "--x": () => rest.frac,
+            duration: 3.2,
+            ease: "power2.out",
             onComplete: settle,
           },
-          1.0
+          1.1
         )
         // supporting elements settle in
         .fromTo(quoteRef.current, { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 1 }, 1.1)
         .fromTo(dividerRef.current, { scaleX: 0 }, { scaleX: 1, duration: 1, ease: "power2.inOut", transformOrigin: "center" }, 1.3)
         .fromTo(metaRef.current.children, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.9, stagger: 0.15 }, 1.5)
         .fromTo(cueRef.current, { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 1 }, 2.0);
+
+      // If the display font loads after first layout it nudges the & a few
+      // pixels; re-measure once fonts are ready so the glint still rests
+      // dead-centre on the &. The tween reads rest.frac live.
+      if (document.fonts?.ready) {
+        document.fonts.ready.then(() => {
+          rest.frac = ampRestFrac();
+        });
+      }
 
       // continuous gentle pulse on the scroll-cue line
       gsap.to(".hero-cue-line", { scaleY: 1.4, transformOrigin: "top", repeat: -1, yoyo: true, duration: 1.4, ease: "sine.inOut" });
@@ -181,19 +220,40 @@ export default function Hero() {
           WITH JOY IN OUR HEARTS AND BLESSINGS FROM OUR FAMILIES
         </p>
 
-        {/* Title — the gold-foil gradient + clip are applied by JS on load so
-            the highlight glides across the LETTERS once, then settles (names
-            burgundy, & permanent gold). */}
-        <h1
-          ref={namesRef}
-          className="relative z-10 font-display-lg leading-[0.95] text-[clamp(3.5rem,15vw,9rem)] text-primary opacity-0"
-        >
-          {COUPLE.bride}{" "}
-          <span ref={ampRef} className="hero-amp">
-            &amp;
-          </span>{" "}
-          {COUPLE.groom}
-        </h1>
+        {/* Title — names stack on mobile (Surya / & / Sowmitha) so they never
+            overflow the viewport; on md+ they sit on one line. max-w-full keeps
+            the one-line layout inside the screen on narrow desktops.
+
+            The LETTERS are always solid burgundy and never disappear. The gold
+            "shine" is a SEPARATE overlay (shineRef) — an exact copy of the same
+            text filled with a gold gradient and revealed only inside a soft
+            moving band (a mask). The band sweeps across once and comes to rest
+            on the &, so a gold glint travels over the names without ever hiding
+            them. After it rests, the & stays permanently gold. */}
+        <div className="relative z-10 max-w-full">
+          <h1
+            ref={namesRef}
+            className="flex max-w-full flex-col items-center gap-1 font-display-lg leading-[0.95] text-[clamp(2.5rem,10vw,8rem)] text-primary opacity-0 md:flex-row md:flex-wrap md:justify-center md:gap-x-5"
+          >
+            <span>{COUPLE.groom}</span>
+            <span ref={ampRef} className="hero-amp leading-none">
+              &amp;
+            </span>
+            <span>{COUPLE.bride}</span>
+          </h1>
+
+          {/* Gold shine overlay — pixel-perfect copy stacked on top, aria-hidden
+              so it isn't announced twice. Filled gold, revealed by a moving mask. */}
+          <div
+            ref={shineRef}
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-0 flex max-w-full flex-col items-center gap-1 font-display-lg leading-[0.95] text-[clamp(2.5rem,10vw,8rem)] opacity-0 md:flex-row md:flex-wrap md:justify-center md:gap-x-5"
+          >
+            <span>{COUPLE.groom}</span>
+            <span className="leading-none">&amp;</span>
+            <span>{COUPLE.bride}</span>
+          </div>
+        </div>
 
         <p
           ref={quoteRef}

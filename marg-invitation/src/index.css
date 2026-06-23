@@ -445,6 +445,16 @@ html.lenis body {
   background: radial-gradient(circle at 50% 50%, rgba(255, 222, 165, 0.95), rgba(197, 160, 89, 0.3) 70%, transparent 100%);
 }
 
+/* Hero shine band position (0..1 across the title). Registered as a typed
+   <number> so it animates smoothly AND so the mask's calc(var(--x)…) reliably
+   re-evaluates and repaints on every frame (unregistered custom properties in
+   gradient calc() don't always trigger a repaint). GSAP tweens this var. */
+@property --x {
+  syntax: "<number>";
+  inherits: false;
+  initial-value: -0.3;
+}
+
 /* Permanent metallic-gold ampersand. Its own gold-foil gradient is clipped to
    the glyph, so once the title settles it keeps a rich gradient (light top →
    deep gold bottom) — never a flat color. Looks like gold foil stamped on the
