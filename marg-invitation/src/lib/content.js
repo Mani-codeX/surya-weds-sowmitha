@@ -90,9 +90,10 @@ export const GALLERY = [
   { span: "col-span-1 row-span-1", order: "order-3 md:order-4", key: "img6" },
 ];
 
+// Seed blessings shown on the wall before any guest adds their own.
 export const BLESSINGS = [
-  { icon: "tradition", label: "TRADITION" },
-  { icon: "heritage", label: "HERITAGE" },
-  { icon: "family", label: "FAMILY" },
-  { icon: "devotion", label: "DEVOTION" },
+  { name: "Kasiraj & Family", message: "Wishing you both a lifetime of love, laughter and togetherness. God bless! 💛" },
+  { name: "Mani", message: "So happy for you two! May your forever be as beautiful as your journey here. 🤍" },
+  { name: "Deivanai", message: "May your home always be filled with joy, health and endless love." },
+  { name: "Praveen", message: "Congratulations Surya & Sowmitha! Wishing you a blessed married life. 🌸" },
 ];

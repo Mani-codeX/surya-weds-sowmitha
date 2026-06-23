@@ -179,6 +179,56 @@ html.lenis body {
   overflow: hidden;
 }
 
+/* Blessing CTA — soft gold glow on hover. */
+.blessing-cta:hover {
+  box-shadow: 0 0 28px rgba(233, 193, 118, 0.4);
+}
+
+/* Gold-gradient blessing text — elegant, luminous (static gradient, no anim). */
+.blessing-text {
+  background: linear-gradient(180deg, #fbe7bf 0%, #e9c176 55%, #c79a4a 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  filter: drop-shadow(0 2px 14px rgba(0, 0, 0, 0.5));
+}
+
+/* Heaven light — a soft radial glow that breathes behind the blessing. */
+@keyframes heaven-pulse {
+  0%,
+  100% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 0.55;
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.12);
+    opacity: 0.8;
+  }
+}
+.heaven-glow {
+  animation: heaven-pulse 4.5s ease-in-out infinite;
+}
+
+/* Heartbeat glow for the small heart above the blessing. */
+@keyframes heart-beat {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.18);
+  }
+}
+.heart-beat {
+  animation: heart-beat 1.8s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .heaven-glow,
+  .heart-beat {
+    animation: none;
+  }
+}
+
 /* ── Cinematic venue CTA buttons ──
    A premium pill button with a gold light-sweep on hover, a lift, and an icon
    that nudges forward. transform + opacity only (60fps). */
