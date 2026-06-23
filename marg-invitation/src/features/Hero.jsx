@@ -123,16 +123,20 @@ export default function Hero() {
         .fromTo(eyebrowRef.current, { opacity: 0, y: 18 }, { opacity: 1, y: 0, duration: 0.9 }, 0.1)
         // title fades in (burgundy letters, always solid)
         .fromTo(names, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 1, ease: "power3.out" }, 0.3)
-        // GOLD GLINT — ONE smooth sweep that travels across the names and
-        // decelerates to rest ON the &. Driving the --x CSS var (0..1 across the
-        // title) moves the masked band; the letters underneath never change.
-        .fromTo(
+        // GOLD GLINT — TWO passes. Pass 1: the band starts off the LEFT edge and
+        // sweeps the WHOLE way across, exiting past the right edge. Then it
+        // resets instantly back off the left (invisible — the band is off-screen
+        // so there's no flash). Pass 2: it sweeps in again and decelerates to
+        // rest exactly ON the &. Driving the --x CSS var (fraction across the
+        // title) moves the masked band; the burgundy letters never change.
+        .to(
           shine,
-          { "--x": -0.3 },
           {
-            "--x": () => rest.frac,
-            duration: 3.2,
-            ease: "power2.out",
+            keyframes: [
+              { "--x": 1.3, duration: 2.4, ease: "power1.inOut" },        // PASS 1 — full sweep L→R, exits right
+              { "--x": -0.3, duration: 0 },                               // invisible reset off the left
+              { "--x": () => rest.frac, duration: 3.0, ease: "power2.out" }, // PASS 2 — sweeps in, decelerates, rests ON the &
+            ],
             onComplete: settle,
           },
           1.1
