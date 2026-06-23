@@ -26,6 +26,7 @@ import img13 from "../assets/wed-images/wed-img-13.webp";
 import birdOne from "../assets/wed-images/bird-one.webp";
 import birdTwo from "../assets/wed-images/bird-two.webp";
 import invitation from "../assets/wed-images/mrg-invitP.jpeg";
+import img15 from "../assets/wed-images/wed-img-15.jpeg";
 
 export const WED_IMG = {
   img1,
@@ -41,4 +42,5 @@ export const WED_IMG = {
   birdOne,
   birdTwo,
   invitation,
+  img15,
 };

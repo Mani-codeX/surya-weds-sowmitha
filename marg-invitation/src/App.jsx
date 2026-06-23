@@ -1,6 +1,5 @@
 import { SmoothScrollProvider } from "./providers/SmoothScrollProvider";
 import AmbientBackground from "./components/AmbientBackground";
-import Navigation from "./components/Navigation";
 import MusicToggle from "./components/MusicToggle";
 import Hero from "./features/Hero";
 import Heritage from "./features/Heritage";
@@ -18,7 +17,6 @@ function App() {
   return (
     <SmoothScrollProvider>
       <AmbientBackground />
-      <Navigation />
       <MusicToggle />
 
       <main className="relative z-10 overflow-hidden silk-grain">
