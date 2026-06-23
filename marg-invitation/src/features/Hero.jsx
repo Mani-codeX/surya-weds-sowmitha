@@ -156,8 +156,28 @@ export default function Hero() {
         });
       }
 
-      // continuous gentle pulse on the scroll-cue line
-      gsap.to(".hero-cue-line", { scaleY: 1.4, transformOrigin: "top", repeat: -1, yoyo: true, duration: 1.4, ease: "sine.inOut" });
+      // SCROLL CUE — animated "go down" invitation, all transform/opacity (cheap):
+      //  • a gold glint repeatedly travels DOWN the track (the "scroll" hint)
+      //  • the whole cue gently bobs down-and-up
+      //  • the label softly breathes in opacity
+      // A short repeatDelay between dot runs reads as a calm, deliberate pulse.
+      gsap.to(".hero-cue-dot", {
+        repeat: -1,
+        repeatDelay: 0.5,
+        keyframes: [
+          { yPercent: -120, opacity: 0, duration: 0 },          // start above the track, hidden
+          { opacity: 1, duration: 0.4, ease: "sine.out" },      // fade in near the top
+          { yPercent: 320, opacity: 0, duration: 1.1, ease: "power1.in" }, // glide down, fading out at the bottom
+        ],
+      });
+      gsap.to(cueRef.current, { y: 8, repeat: -1, yoyo: true, duration: 1.6, ease: "sine.inOut" });
+      gsap.to(".hero-cue-label", { opacity: 0.55, repeat: -1, yoyo: true, duration: 1.6, ease: "sine.inOut" });
+      // chevron gently nudges down and back, fading at the bottom — a soft "↓"
+      gsap.fromTo(
+        ".hero-cue-arrow",
+        { y: -2, opacity: 0.45 },
+        { y: 4, opacity: 1, repeat: -1, yoyo: true, duration: 1.4, ease: "sine.inOut" }
+      );
 
       // rose petals — slow, low density, recycled
       petalsRef.current.querySelectorAll(".hero-petal").forEach((petal, i) => {
@@ -187,7 +207,7 @@ export default function Hero() {
     <section
       ref={rootRef}
       id="hero"
-      className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden px-mobile-margin md:px-container-padding text-center"
+      className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden px-mobile-margin md:px-container-padding text-center py-20 md:py-0"
     >
       {/* warm radial glow centerpiece */}
       <div
@@ -261,32 +281,54 @@ export default function Hero() {
 
         <p
           ref={quoteRef}
-          className="mt-8 max-w-xl font-quote text-xl md:text-quote italic text-on-surface-variant opacity-0"
+          className="mt-6 md:mt-8 max-w-xl font-quote text-xl md:text-quote italic text-on-surface-variant opacity-0"
         >
           Two souls, one promise, and a lifetime of love.
         </p>
 
         {/* gold ornamental divider */}
-        <div className="mt-10 flex items-center gap-4">
+        <div className="mt-7 md:mt-10 flex items-center gap-4">
           <span
             ref={dividerRef}
             className="block h-px w-32 md:w-56 origin-center bg-gradient-to-r from-transparent via-secondary to-transparent"
           />
         </div>
 
-        <div ref={metaRef} className="mt-10 flex flex-col items-center gap-3 font-label-caps text-label-caps tracking-[0.25em] text-primary md:flex-row md:gap-10">
+        <div ref={metaRef} className="mt-7 md:mt-10 flex flex-col items-center gap-3 font-label-caps text-label-caps tracking-[0.25em] text-primary md:flex-row md:gap-10">
           <span className="opacity-0">JULY 12, 2026</span>
           <span className="hidden h-4 w-px bg-secondary/50 md:block opacity-0" />
           <span className="opacity-0">BODINAYAKANUR, TAMIL NADU</span>
         </div>
       </div>
 
-      {/* Premium scroll cue */}
-      <div ref={cueRef} className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3 opacity-0">
-        <span className="font-label-caps text-[0.7rem] tracking-[0.35em] text-secondary">
+      {/* Premium scroll cue — a gold glint travels DOWN the line on a loop, the
+          whole cue gently bobs, and the label softly breathes: a clear, elegant
+          "scroll down to begin" invitation.
+
+          Mobile: sits in normal flow (relative) with a top margin, so it can
+          NEVER overlap the meta text however short the viewport is. Desktop:
+          pinned to the bottom of the hero as before. */}
+      <div ref={cueRef} className="relative mt-14 flex flex-col items-center gap-3 opacity-0 md:absolute md:bottom-10 md:left-0 md:right-0 md:mt-0">
+        <span className="hero-cue-label font-label-caps text-[0.7rem] tracking-[0.35em] text-secondary">
           BEGIN THE JOURNEY
         </span>
-        <span className="hero-cue-line block h-10 w-px bg-gradient-to-b from-secondary to-transparent" />
+        {/* track + a travelling light dot */}
+        <span className="relative block h-12 w-px overflow-hidden bg-linear-to-b from-secondary/40 to-transparent">
+          <span className="hero-cue-dot absolute left-1/2 top-0 h-3 w-px -translate-x-1/2 bg-linear-to-b from-transparent via-secondary to-transparent" />
+        </span>
+        {/* thin chevron arrow — gently drifts down, reinforcing "scroll down" */}
+        <svg
+          className="hero-cue-arrow -mt-1 h-3 w-4 text-secondary"
+          viewBox="0 0 16 12"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          aria-hidden="true"
+        >
+          <path d="M2 3l6 6 6-6" />
+        </svg>
       </div>
     </section>
   );

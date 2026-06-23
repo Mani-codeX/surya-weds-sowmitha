@@ -221,42 +221,42 @@ export default function Blessings() {
         </div>
       </div>
 
-      {/* ── Share modal ── */}
+      {/* ── Share modal ── compact on mobile; desktop (sm+) unchanged. */}
       {modalOpen && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4" role="dialog" aria-modal="true">
           <button type="button" aria-label="Close" onClick={() => setModalOpen(false)} className="absolute inset-0 bg-primary/75" />
           <form
             onSubmit={submit}
-            className="relative z-10 w-full max-w-md rounded-3xl border border-secondary-fixed/40 bg-surface p-8 text-left text-on-surface shadow-2xl"
+            className="relative z-10 w-full max-w-76 rounded-2xl border border-secondary-fixed/40 bg-surface p-5 text-left text-on-surface shadow-2xl sm:max-w-md sm:rounded-3xl sm:p-8"
             style={{ backgroundImage: "linear-gradient(160deg, rgba(233,193,118,0.10), transparent 55%)" }}
           >
-            <span className="pointer-events-none absolute inset-2.5 rounded-[1.4rem] border border-secondary/25" />
-            <h3 className="mb-1 text-center font-headline-md text-2xl text-primary">Share Your Blessing</h3>
-            <p className="mb-6 text-center font-body-md text-sm text-on-surface-variant">For {COUPLE.groom} &amp; {COUPLE.bride}</p>
+            <span className="pointer-events-none absolute inset-2 rounded-2xl border border-secondary/25 sm:inset-2.5 sm:rounded-[1.4rem]" />
+            <h3 className="mb-1 text-center font-headline-md text-lg text-primary sm:text-2xl">Share Your Blessing</h3>
+            <p className="mb-4 text-center font-body-md text-xs text-on-surface-variant sm:mb-6 sm:text-sm">For {COUPLE.groom} &amp; {COUPLE.bride}</p>
 
             <textarea
               value={draft}
               onChange={(e) => setDraft(e.target.value)}
               required
-              rows={4}
+              rows={3}
               maxLength={240}
               placeholder={`Write your blessing for the couple…\ne.g. ${PLACEHOLDER}`}
-              className="mb-6 w-full resize-none rounded-xl border border-outline-variant bg-transparent px-4 py-3 font-quote text-lg italic text-on-surface placeholder:text-on-surface-variant/45 focus:border-secondary focus:outline-none"
+              className="mb-4 w-full resize-none rounded-xl border border-outline-variant bg-transparent px-3 py-2.5 font-quote text-sm italic text-on-surface placeholder:text-on-surface-variant/45 focus:border-secondary focus:outline-none sm:mb-6 sm:px-4 sm:py-3 sm:text-lg"
             />
 
-            <div className="flex gap-3">
+            <div className="flex items-center gap-2.5 sm:gap-3">
               <button
                 type="button"
                 onClick={() => setModalOpen(false)}
-                className="flex-1 rounded-full border border-outline-variant py-3 font-label-caps text-xs tracking-widest text-on-surface-variant transition-colors hover:border-secondary hover:text-primary"
+                className="flex-1 rounded-full border border-outline-variant py-2.5 font-label-caps text-[0.65rem] tracking-widest text-on-surface-variant transition-colors hover:border-secondary hover:text-primary sm:py-3 sm:text-xs"
               >
                 CANCEL
               </button>
               <button
                 type="submit"
-                className="blessing-cta flex-1 rounded-full bg-primary py-3 font-label-caps text-xs tracking-widest text-on-primary transition-transform hover:scale-[1.03]"
+                className="blessing-cta flex-1 whitespace-nowrap rounded-full bg-primary py-2.5 font-label-caps text-[0.65rem] tracking-widest text-on-primary transition-transform hover:scale-[1.03] sm:py-3 sm:text-xs"
               >
-                ✨ SEND BLESSING
+                ✨ SEND
               </button>
             </div>
           </form>

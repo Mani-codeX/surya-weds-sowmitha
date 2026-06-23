@@ -45,7 +45,7 @@ export default function MarriedMessage() {
       </h2>
 
       <p data-rise className="font-display-lg text-2xl italic text-on-primary md:text-3xl">
-        {COUPLE.bride} &amp; {COUPLE.groom}
+        {COUPLE.groom} &amp; {COUPLE.bride}
       </p>
 
       <p data-rise className="max-w-sm font-body-lg text-sm leading-relaxed text-surface-container-lowest/90 md:text-base">

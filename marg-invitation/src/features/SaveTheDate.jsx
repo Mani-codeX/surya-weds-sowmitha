@@ -32,11 +32,10 @@ export default function SaveTheDate() {
   const namesRef = useRef(null);
   const dateRef = useRef(null);
   const directRef = useRef(null);
-  // phaseOverride: dev test toggle (null = use real date). Remove the segment +
-  // this state once tested.
-  const [phaseOverride, setPhaseOverride] = useState(null);
-  const realPhase = getPhase();
-  const phase = phaseOverride ?? realPhase;
+  // Phase is derived purely from today's date (see getPhase): scratch card
+  // before the wedding, the date directly on 11–12 Jul, the married blessing
+  // from 13 Jul onward.
+  const phase = getPhase();
   const [revealed, setRevealed] = useState(false);
 
   const onScratchDone = () => setRevealed(true);
@@ -70,30 +69,6 @@ export default function SaveTheDate() {
 
   return (
     <section className="relative flex h-screen items-center justify-center overflow-hidden md:justify-start md:pl-[2%] lg:pl-[4%]">
-      {/* DEV TEST SEGMENT — preview each date phase. Remove after testing. */}
-      <div className="absolute left-4 top-4 z-50 flex overflow-hidden rounded-full border border-secondary-fixed/40 text-[0.65rem]">
-        {[
-          { p: null, t: "Live" },
-          { p: "before", t: "≤Jul10" },
-          { p: "wedding", t: "Jul11-12" },
-          { p: "married", t: "Jul13+" },
-        ].map((o) => (
-          <button
-            key={o.t}
-            type="button"
-            onClick={() => {
-              setPhaseOverride(o.p);
-              setRevealed(false);
-            }}
-            className={`px-3 py-1.5 font-label-caps tracking-widest transition-colors ${
-              phaseOverride === o.p ? "bg-secondary-fixed text-primary" : "bg-primary/70 text-secondary-fixed"
-            }`}
-          >
-            {o.t}
-          </button>
-        ))}
-      </div>
-
       <div className="absolute inset-0 z-0">
         <ProtectedImage
           src={WED_IMG.img1}
