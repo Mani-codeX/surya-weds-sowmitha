@@ -34,15 +34,22 @@ export function SmoothScrollProvider({ children }) {
   const lenisRef = useRef(null);
 
   useEffect(() => {
-    const instance = new Lenis({
-    
-      lerp: 0.1,
-      smoothWheel: true,
-      wheelMultiplier: 1,
-      syncTouch: true,
-      touchMultiplier: 1,
-      syncTouchLerp: 0.05,
-    });
+    const isMobile = window.matchMedia("(max-width: 767px)").matches;
+
+    const instance = new Lenis(
+      isMobile
+        ? {
+            // mobile — pure native scroll, Lenis only syncs ScrollTrigger
+            smoothWheel: false,
+            syncTouch: false,
+          }
+        : {
+            // desktop — buttery smooth wheel scroll
+            lerp: 0.1,
+            smoothWheel: true,
+            wheelMultiplier: 1,
+          }
+    );
 
     lenisRef.current = instance;
 
