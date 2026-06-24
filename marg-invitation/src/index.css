@@ -569,15 +569,10 @@ html.lenis body {
 }
 
 /* ════════════════════════════════════════════════════════════════════
-   CREATOR REVEAL  —  cinematic post-credit signature section.
-   transform + opacity only on every animated element (60fps, GPU).
+   CREATOR REVEAL  —  commented out (component disabled in App.jsx)
    ════════════════════════════════════════════════════════════════════ */
 
-/* ── outer section ── */
-/* ─────────────────────────────────────────────
-   CreatorReveal — transparent, content-centered
-   ───────────────────────────────────────────── */
-.cr-section {
+/* .cr-section {
   position: relative;
   background: #210000 !important;
   display: flex;
@@ -591,7 +586,6 @@ html.lenis body {
   box-sizing: border-box;
 }
 
-/* prologue — appended to document.body by JS, true viewport fixed */
 .cr-prologue {
   position: fixed;
   top: 0;
@@ -618,7 +612,6 @@ html.lenis body {
   filter: drop-shadow(0 0 18px rgba(197, 160, 89, 0.35));
 }
 
-/* dust particles — absolute inside section */
 .cr-dust-field {
   position: absolute;
   inset: 0;
@@ -650,7 +643,6 @@ html.lenis body {
   100% { opacity: 0;   transform: translateY(-60px) translateX(var(--dx, 10px)); }
 }
 
-/* card — single centered column, no background */
 .cr-card {
   position: relative;
   z-index: 1;
@@ -666,7 +658,6 @@ html.lenis body {
   background: transparent;
 }
 
-/* ornament SVG row */
 .cr-ornament {
   margin-bottom: 16px;
   opacity: 0.85;
@@ -674,7 +665,6 @@ html.lenis body {
   justify-content: center;
 }
 
-/* eyebrow text */
 .cr-eyebrow {
   margin: 0 0 20px;
   font-family: "Source Serif 4", serif;
@@ -684,7 +674,6 @@ html.lenis body {
   color: rgba(197, 160, 89, 0.55);
 }
 
-/* gold hairline */
 .cr-line {
   width: 80px;
   height: 1px;
@@ -702,7 +691,6 @@ html.lenis body {
   );
 }
 
-/* photo cluster — fixed square, centered by flex parent */
 .cr-photo-cluster {
   position: relative;
   width: 160px;
@@ -713,7 +701,6 @@ html.lenis body {
   transform: translateZ(0);
 }
 
-/* halo glow */
 .cr-halo {
   position: absolute;
   inset: -28px;
@@ -728,7 +715,6 @@ html.lenis body {
   );
 }
 
-/* rotating dashed ring */
 .cr-ring {
   position: absolute;
   inset: -12px;
@@ -738,7 +724,6 @@ html.lenis body {
   will-change: transform;
 }
 
-/* photo wrap — floats via GSAP */
 .cr-photo-wrap {
   position: absolute;
   inset: 0;
@@ -763,7 +748,6 @@ html.lenis body {
   -webkit-user-drag: none;
 }
 
-/* light sweep */
 .cr-sweep {
   position: absolute;
   inset: 0;
@@ -777,7 +761,6 @@ html.lenis body {
   transform: translateX(-110%);
 }
 
-/* name */
 .cr-name {
   margin: 0 0 4px;
   font-family: "Playfair Display", serif;
@@ -800,7 +783,6 @@ html.lenis body {
   --shimmer-pos: -20%;
 }
 
-/* heart */
 .cr-heart {
   display: block;
   font-size: 12px;
@@ -811,7 +793,6 @@ html.lenis body {
   filter: drop-shadow(0 0 6px rgba(197, 160, 89, 0.5));
 }
 
-/* thin gold divider */
 .cr-divider {
   width: 48px;
   height: 1px;
@@ -821,7 +802,6 @@ html.lenis body {
   background: linear-gradient(90deg, transparent, rgba(197, 160, 89, 0.5) 50%, transparent);
 }
 
-/* role */
 .cr-role {
   margin: 0 0 16px;
   font-family: "Source Serif 4", serif;
@@ -832,7 +812,6 @@ html.lenis body {
   opacity: 0;
 }
 
-/* dedication */
 .cr-dedication {
   margin: 0;
   font-family: "Playfair Display", serif;
@@ -858,4 +837,4 @@ html.lenis body {
 @media (prefers-reduced-motion: reduce) {
   .cr-dust     { animation: none; opacity: 0.4; }
   .cr-prologue { -webkit-text-fill-color: rgba(197, 160, 89, 0.7); filter: none; }
-}
+} */

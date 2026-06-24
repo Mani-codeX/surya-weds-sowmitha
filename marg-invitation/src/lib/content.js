@@ -86,7 +86,7 @@ export const RITUALS = [
 export const GALLERY = [
   { span: "col-span-2 row-span-2", order: "order-1", key: "img3" },
   { span: "col-span-1 row-span-1", order: "order-2", key: "img7", position: "center 30%", zoom: true },
-  { span: "col-span-2 row-span-2 md:col-span-1", order: "order-4 md:order-3", key: "img5", position: "center top" },
+  { span: "col-span-2 row-span-2 md:col-span-1", order: "order-4 md:order-3", key: "img4", position: "center top" },
   { span: "col-span-1 row-span-1", order: "order-3 md:order-4", key: "img6" },
 ];
 

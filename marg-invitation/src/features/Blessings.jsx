@@ -136,7 +136,7 @@ export default function Blessings() {
       <div className="absolute inset-0 z-0">
         <ProtectedImage
           ref={imgRef}
-          src={WED_IMG.img4}
+          src={WED_IMG.img5}
           alt="Surya & Sowmitha"
           className="h-full w-full object-cover opacity-0"
           style={{

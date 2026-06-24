@@ -295,8 +295,6 @@ export default function Hero() {
         </div>
 
         <div ref={metaRef} className="mt-7 md:mt-10 flex flex-col items-center gap-3 font-label-caps text-label-caps tracking-[0.25em] text-primary md:flex-row md:gap-10">
-          <span className="opacity-0">JULY 12, 2026</span>
-          <span className="hidden h-4 w-px bg-secondary/50 md:block opacity-0" />
           <span className="opacity-0">BODINAYAKANUR, TAMIL NADU</span>
         </div>
       </div>

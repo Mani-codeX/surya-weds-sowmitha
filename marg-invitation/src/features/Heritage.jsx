@@ -140,7 +140,7 @@ export default function Heritage() {
             className="aspect-3/4 overflow-hidden rounded-lg shadow-2xl border-4 border-secondary/20 grayscale-[0.2]"
           >
             <ProtectedImage
-              src={WED_IMG.img2}
+              src={WED_IMG.imgRech}
               alt="Sowmitha & Surya"
               className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000"
             />
