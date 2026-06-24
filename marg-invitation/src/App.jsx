@@ -11,6 +11,7 @@ import Blessings from "./features/Blessings";
 import Gallery from "./features/Gallery";
 import Rsvp from "./features/Rsvp";
 import Footer from "./features/Footer";
+import CreatorReveal from "./features/CreatorReveal";
 
 
 function App() {
@@ -29,9 +30,12 @@ function App() {
         <Blessings />
         <Gallery />
         <Rsvp />
+         <CreatorReveal /> 
+          <Footer />
       </main>
 
-      <Footer />
+      {/* <Footer />
+      <CreatorReveal /> */}
     </SmoothScrollProvider>
   );
 }

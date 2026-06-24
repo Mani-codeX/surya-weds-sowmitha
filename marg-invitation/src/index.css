@@ -567,3 +567,295 @@ html.lenis body {
     display: none;
   }
 }
+
+/* ════════════════════════════════════════════════════════════════════
+   CREATOR REVEAL  —  cinematic post-credit signature section.
+   transform + opacity only on every animated element (60fps, GPU).
+   ════════════════════════════════════════════════════════════════════ */
+
+/* ── outer section ── */
+/* ─────────────────────────────────────────────
+   CreatorReveal — transparent, content-centered
+   ───────────────────────────────────────────── */
+.cr-section {
+  position: relative;
+  background: #210000 !important;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  min-height: 40vh;
+  padding: 72px 24px 80px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* prologue — appended to document.body by JS, true viewport fixed */
+.cr-prologue {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  padding: 0 32px;
+  pointer-events: none;
+  z-index: 9998;
+  opacity: 0;
+  font-family: "Playfair Display", serif;
+  font-style: italic;
+  font-size: clamp(1.1rem, 3.5vw, 1.6rem);
+  letter-spacing: 0.06em;
+  text-align: center;
+  background: linear-gradient(135deg, #c5a059 0%, #f4d27a 40%, #fff3d0 65%, #e9c176 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 0 18px rgba(197, 160, 89, 0.35));
+}
+
+/* dust particles — absolute inside section */
+.cr-dust-field {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 0;
+}
+
+.cr-dust {
+  position: absolute;
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  opacity: 0;
+  will-change: transform, opacity;
+  background: radial-gradient(
+    circle,
+    rgba(255, 243, 200, 0.95) 0%,
+    rgba(197, 160, 89, 0.45) 55%,
+    transparent 100%
+  );
+  animation: cr-dust-float var(--dur, 5s) var(--delay, 0s) ease-in-out infinite;
+}
+
+@keyframes cr-dust-float {
+  0%   { opacity: 0;   transform: translateY(0) translateX(0); }
+  15%  { opacity: 0.7; }
+  85%  { opacity: 0.5; }
+  100% { opacity: 0;   transform: translateY(-60px) translateX(var(--dx, 10px)); }
+}
+
+/* card — single centered column, no background */
+.cr-card {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  width: 100%;
+  max-width: 420px;
+  margin: 0 auto;
+  text-align: center;
+  background: transparent;
+}
+
+/* ornament SVG row */
+.cr-ornament {
+  margin-bottom: 16px;
+  opacity: 0.85;
+  display: flex;
+  justify-content: center;
+}
+
+/* eyebrow text */
+.cr-eyebrow {
+  margin: 0 0 20px;
+  font-family: "Source Serif 4", serif;
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(197, 160, 89, 0.55);
+}
+
+/* gold hairline */
+.cr-line {
+  width: 80px;
+  height: 1px;
+  transform-origin: center;
+  transform: scaleX(0);
+  opacity: 0;
+  margin-bottom: 32px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(197, 160, 89, 0.3) 15%,
+    rgba(233, 193, 118, 0.85) 50%,
+    rgba(197, 160, 89, 0.3) 85%,
+    transparent
+  );
+}
+
+/* photo cluster — fixed square, centered by flex parent */
+.cr-photo-cluster {
+  position: relative;
+  width: 160px;
+  height: 160px;
+  flex-shrink: 0;
+  margin: 0 auto 20px;
+  cursor: pointer;
+  transform: translateZ(0);
+}
+
+/* halo glow */
+.cr-halo {
+  position: absolute;
+  inset: -28px;
+  border-radius: 50%;
+  opacity: 0;
+  will-change: transform, opacity;
+  background: radial-gradient(
+    circle at 50% 50%,
+    rgba(233, 193, 118, 0.28) 0%,
+    rgba(197, 160, 89, 0.12) 45%,
+    transparent 72%
+  );
+}
+
+/* rotating dashed ring */
+.cr-ring {
+  position: absolute;
+  inset: -12px;
+  width: calc(100% + 24px);
+  height: calc(100% + 24px);
+  opacity: 0;
+  will-change: transform;
+}
+
+/* photo wrap — floats via GSAP */
+.cr-photo-wrap {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  overflow: hidden;
+  will-change: transform;
+  box-shadow:
+    0 0 0 2px rgba(197, 160, 89, 0.55),
+    0 0 0 5px rgba(33, 0, 0, 0.9),
+    0 0 0 7px rgba(197, 160, 89, 0.35),
+    0 8px 40px rgba(0, 0, 0, 0.55);
+}
+
+.cr-photo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 20%;
+  display: block;
+  border-radius: 50%;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+/* light sweep */
+.cr-sweep {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    115deg,
+    transparent 25%,
+    rgba(255, 252, 240, 0.45) 50%,
+    transparent 75%
+  );
+  transform: translateX(-110%);
+}
+
+/* name */
+.cr-name {
+  margin: 0 0 4px;
+  font-family: "Playfair Display", serif;
+  font-size: clamp(2rem, 7vw, 2.8rem);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  background: linear-gradient(160deg, #fff3d0 0%, #f4d27a 22%, #d4af37 50%, #b8860b 74%, #8a6508 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 2px 12px rgba(197, 160, 89, 0.4));
+  position: relative;
+  --shimmer-pos: 200%;
+  background-size: 220% 100%;
+  background-position: var(--shimmer-pos, 130%) center;
+  transition: background-position 0.75s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.cr-name--shimmer {
+  --shimmer-pos: -20%;
+}
+
+/* heart */
+.cr-heart {
+  display: block;
+  font-size: 12px;
+  color: rgba(197, 160, 89, 0.7);
+  margin-bottom: 10px;
+  opacity: 0;
+  will-change: transform, opacity;
+  filter: drop-shadow(0 0 6px rgba(197, 160, 89, 0.5));
+}
+
+/* thin gold divider */
+.cr-divider {
+  width: 48px;
+  height: 1px;
+  transform-origin: center;
+  opacity: 0;
+  margin-bottom: 12px;
+  background: linear-gradient(90deg, transparent, rgba(197, 160, 89, 0.5) 50%, transparent);
+}
+
+/* role */
+.cr-role {
+  margin: 0 0 16px;
+  font-family: "Source Serif 4", serif;
+  font-size: 11.5px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(197, 160, 89, 0.55);
+  opacity: 0;
+}
+
+/* dedication */
+.cr-dedication {
+  margin: 0;
+  font-family: "Playfair Display", serif;
+  font-style: italic;
+  font-size: clamp(0.85rem, 2.5vw, 1rem);
+  line-height: 1.8;
+  color: rgba(255, 255, 255, 0.28);
+  letter-spacing: 0.03em;
+  opacity: 0;
+}
+.cr-dedication em {
+  font-style: normal;
+  color: rgba(197, 160, 89, 0.55);
+}
+
+@media (max-width: 640px) {
+  .cr-section       { padding: 56px 20px 64px; }
+  .cr-photo-cluster { width: 130px; height: 130px; }
+  .cr-ring          { inset: -10px; width: calc(100% + 20px); height: calc(100% + 20px); }
+  .cr-halo          { inset: -22px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cr-dust     { animation: none; opacity: 0.4; }
+  .cr-prologue { -webkit-text-fill-color: rgba(197, 160, 89, 0.7); filter: none; }
+}
