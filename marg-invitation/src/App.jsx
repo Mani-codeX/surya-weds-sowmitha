@@ -20,7 +20,7 @@ function App() {
       <AmbientBackground />
       <MusicToggle />
 
-      <main className="relative z-10 overflow-hidden silk-grain">
+      <main className="relative z-0 overflow-hidden silk-grain">
         <Hero />
         <GarlandExchange />
         <Heritage />
@@ -30,12 +30,9 @@ function App() {
         <Blessings />
         <Gallery />
         <Rsvp />
-         <CreatorReveal /> 
-          <Footer />
+        <CreatorReveal />
+        <Footer />
       </main>
-
-      {/* <Footer />
-      <CreatorReveal /> */}
     </SmoothScrollProvider>
   );
 }
