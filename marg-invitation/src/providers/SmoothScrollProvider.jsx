@@ -35,15 +35,13 @@ export function SmoothScrollProvider({ children }) {
 
   useEffect(() => {
     const instance = new Lenis({
-      // `lerp` gives a more consistent, framerate-independent smoothing than a
-      // fixed duration — the single biggest win for "buttery" feel. Lower =
-      // heavier glide; 0.1 is the luxury sweet spot.
+    
       lerp: 0.1,
       smoothWheel: true,
       wheelMultiplier: 1,
-      // Keep touch close to native momentum so mobile never feels "swimmy".
       syncTouch: true,
-      touchMultiplier: 1.2,
+      touchMultiplier: 2,
+      syncTouchLerp: 0.075,
     });
 
     lenisRef.current = instance;

@@ -11,6 +11,7 @@ import Blessings from "./features/Blessings";
 import Gallery from "./features/Gallery";
 import Rsvp from "./features/Rsvp";
 import Footer from "./features/Footer";
+import ScrollProgress from "./components/ScrollProgress";
 // import CreatorReveal from "./features/CreatorReveal";
 
 
@@ -19,6 +20,7 @@ function App() {
     <SmoothScrollProvider>
       <AmbientBackground />
       <MusicToggle />
+      <ScrollProgress />
 
       <main className="relative z-0 overflow-hidden silk-grain">
         <Hero />

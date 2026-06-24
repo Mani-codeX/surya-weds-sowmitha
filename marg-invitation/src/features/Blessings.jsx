@@ -17,7 +17,6 @@ const MESSAGE = [
   "Thank you for being part of our journey.",
 ];
 
-const STORAGE_KEY = "guestBlessing";
 const PLACEHOLDER = "May your journey together be filled with love and happiness.";
 
 /**
@@ -40,14 +39,8 @@ export default function Blessings() {
   const typeTimer = useRef(null);
   const { prefersReducedMotion } = useResponsive();
 
-  // saved blessing (persisted) → once set, the visitor can't submit again
-  const [saved, setSaved] = useState(() => {
-    try {
-      return localStorage.getItem(STORAGE_KEY) || "";
-    } catch {
-      return "";
-    }
-  });
+  // session-only blessing — not persisted, clears on refresh
+  const [saved, setSaved] = useState("");
   const [modalOpen, setModalOpen] = useState(false);
   const [draft, setDraft] = useState("");
   const [typed, setTyped] = useState(saved); // letters revealed so far
@@ -86,11 +79,6 @@ export default function Blessings() {
     e.preventDefault();
     const text = draft.trim();
     if (!text) return;
-    try {
-      localStorage.setItem(STORAGE_KEY, text);
-    } catch {
-      /* storage blocked — still show it this session */
-    }
     setSaved(text);
     setModalOpen(false);
     playReveal(text);

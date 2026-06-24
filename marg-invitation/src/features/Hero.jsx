@@ -161,23 +161,24 @@ export default function Hero() {
       //  • the whole cue gently bobs down-and-up
       //  • the label softly breathes in opacity
       // A short repeatDelay between dot runs reads as a calm, deliberate pulse.
+      // dot slides down inside the mouse, loops
       gsap.to(".hero-cue-dot", {
         repeat: -1,
-        repeatDelay: 0.5,
+        repeatDelay: 0.6,
         keyframes: [
-          { yPercent: -120, opacity: 0, duration: 0 },          // start above the track, hidden
-          { opacity: 1, duration: 0.4, ease: "sine.out" },      // fade in near the top
-          { yPercent: 320, opacity: 0, duration: 1.1, ease: "power1.in" }, // glide down, fading out at the bottom
+          { y: 0, opacity: 1, duration: 0 },
+          { y: 14, opacity: 0, duration: 1.0, ease: "power1.in" },
+          { y: 0, opacity: 0, duration: 0 },
+          { opacity: 1, duration: 0.2 },
         ],
       });
-      gsap.to(cueRef.current, { y: 8, repeat: -1, yoyo: true, duration: 1.6, ease: "sine.inOut" });
-      gsap.to(".hero-cue-label", { opacity: 0.55, repeat: -1, yoyo: true, duration: 1.6, ease: "sine.inOut" });
-      // chevron gently nudges down and back, fading at the bottom — a soft "↓"
-      gsap.fromTo(
-        ".hero-cue-arrow",
-        { y: -2, opacity: 0.45 },
-        { y: 4, opacity: 1, repeat: -1, yoyo: true, duration: 1.4, ease: "sine.inOut" }
-      );
+      // whole cue gently bobs
+      gsap.to(cueRef.current, { y: 6, repeat: -1, yoyo: true, duration: 1.6, ease: "sine.inOut" });
+      // label breathes
+      gsap.to(".hero-cue-label", { opacity: 0.35, repeat: -1, yoyo: true, duration: 1.6, ease: "sine.inOut" });
+      // chevrons cascade — top one leads, bottom follows with delay
+      gsap.fromTo(".hero-cue-arrow",  { y: -2, opacity: 0.3 }, { y: 3, opacity: 0.9, repeat: -1, yoyo: true, duration: 1.1, ease: "sine.inOut" });
+      gsap.fromTo(".hero-cue-arrow2", { y: -2, opacity: 0.1 }, { y: 3, opacity: 0.5, repeat: -1, yoyo: true, duration: 1.1, delay: 0.25, ease: "sine.inOut" });
 
       // rose petals — slow, low density, recycled
       petalsRef.current.querySelectorAll(".hero-petal").forEach((petal, i) => {
@@ -306,27 +307,20 @@ export default function Hero() {
           Mobile: sits in normal flow (relative) with a top margin, so it can
           NEVER overlap the meta text however short the viewport is. Desktop:
           pinned to the bottom of the hero as before. */}
-      <div ref={cueRef} className="relative mt-14 flex flex-col items-center gap-3 opacity-0 md:absolute md:bottom-10 md:left-0 md:right-0 md:mt-0">
-        <span className="hero-cue-label font-label-caps text-[0.7rem] tracking-[0.35em] text-secondary">
-          BEGIN THE JOURNEY
+      <div ref={cueRef} className="relative mt-14 flex flex-col items-center gap-2 opacity-0 md:absolute md:bottom-10 md:left-0 md:right-0 md:mt-0">
+        <span className="hero-cue-label font-label-caps text-[0.65rem] tracking-[0.3em] text-secondary/70">
+          SCROLL
         </span>
-        {/* track + a travelling light dot */}
-        <span className="relative block h-12 w-px overflow-hidden bg-linear-to-b from-secondary/40 to-transparent">
-          <span className="hero-cue-dot absolute left-1/2 top-0 h-3 w-px -translate-x-1/2 bg-linear-to-b from-transparent via-secondary to-transparent" />
-        </span>
-        {/* thin chevron arrow — gently drifts down, reinforcing "scroll down" */}
-        <svg
-          className="hero-cue-arrow -mt-1 h-3 w-4 text-secondary"
-          viewBox="0 0 16 12"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="1.5"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          aria-hidden="true"
-        >
-          <path d="M2 3l6 6 6-6" />
-        </svg>
+        {/* mouse body */}
+        <div className="relative flex h-9 w-5 items-start justify-center rounded-full border border-secondary/50 pt-1.5">
+          {/* scrolling dot inside mouse */}
+          <span className="hero-cue-dot block h-1.5 w-1 rounded-full bg-secondary" />
+        </div>
+        {/* two stacked chevrons that cascade down */}
+        <div className="flex flex-col items-center -mt-0.5 gap-0.5">
+          <svg className="hero-cue-arrow h-2.5 w-3 text-secondary/80" viewBox="0 0 12 8" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M1 1l5 5 5-5"/></svg>
+          <svg className="hero-cue-arrow2 h-2.5 w-3 text-secondary/40" viewBox="0 0 12 8" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M1 1l5 5 5-5"/></svg>
+        </div>
       </div>
     </section>
   );

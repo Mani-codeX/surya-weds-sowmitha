@@ -1,14 +1,6 @@
 @import "tailwindcss";
 
-/* ════════════════════════════════════════════════════════════════════
-   CENTRALIZED DESIGN SYSTEM — single source of truth.
 
-   Tailwind v4 reads design tokens from this @theme block and generates the
-   utilities (bg-primary, text-secondary, font-display-lg, p-section-gap, …).
-   Change a value here and it propagates across the whole app automatically.
-
-   Tokens mirror DESIGN.md (Temple Heritage & Royal Cinematic).
-   ════════════════════════════════════════════════════════════════════ */
 @theme {
   /* ── Colors ── */
   --color-surface: #fff8f5;
@@ -135,14 +127,7 @@ body {
   overflow-x: hidden;
 }
 
-/* ── Responsive spacing (mobile/tablet) ──
-   DESIGN.md specifies the desktop section-gap (160px) + container-padding
-   (64px) should compress on smaller screens (tablet 40px, mobile 20px). The
-   desktop design system values are unchanged; these only kick in below the
-   breakpoints so the 64px side padding never crushes content on phones and the
-   160px vertical rhythm doesn't leave huge dead space on small screens.
-   We override the generated utilities directly (not the @theme vars) so the
-   change is reliable regardless of how Tailwind inlines the token. */
+
 @media (max-width: 1024px) {
   .px-container-padding {
     padding-left: 40px;
@@ -319,16 +304,7 @@ html.lenis body {
   }
 }
 
-/* ════════════════════════════════════════════════════════════════════
-   DECORATIVE TEXTURES (from the source HTML)
-   ════════════════════════════════════════════════════════════════════ */
 
-/* Subtle paper grain.
-   PERF: the original applied a tiled background-image via ::before on full-page
-   elements, creating composited layers as tall as the whole document — a major
-   scroll-repaint cost on desktop. Instead we render ONE fixed, viewport-sized
-   grain layer (.grain-layer) in AmbientBackground. .silk-grain is now an inert
-   marker class so existing markup needn't change. */
 .grain-layer {
   position: fixed;
   inset: 0;

@@ -5,6 +5,8 @@ import ProtectedImage from "../components/ProtectedImage";
 import { WED_IMG } from "../lib/weddingImages";
 import { COUPLE } from "../lib/content";
 
+const PARTICLES = Array.from({ length: 12 }, (_, i) => i);
+
 const PAPER = "https://www.transparenttextures.com/patterns/natural-paper.png";
 
 /**
@@ -13,23 +15,26 @@ const PAPER = "https://www.transparenttextures.com/patterns/natural-paper.png";
  * Form is visual-only (no backend submit).
  */
 export default function Rsvp() {
-  const sectionRef = useRef(null);
-  const doorWrapRef = useRef(null);
-  const leftRef = useRef(null);
-  const rightRef = useRef(null);
-  const closingRef = useRef(null);
+  const sectionRef    = useRef(null);
+  const doorWrapRef   = useRef(null);
+  const leftRef       = useRef(null);
+  const rightRef      = useRef(null);
+  const closingRef    = useRef(null);
+  const initialsRef   = useRef(null);
+  const dividerRef    = useRef(null);
+  const quoteRef      = useRef(null);
+  const subRef        = useRef(null);
+  const particlesRef  = useRef(null);
   const { prefersReducedMotion } = useResponsive();
 
   useLayoutEffect(() => {
     const section = sectionRef.current;
     if (!section) return;
     const ctx = gsap.context(() => {
-      const closing = closingRef.current.children;
-
       if (prefersReducedMotion) {
         gsap.set(leftRef.current, { xPercent: -100 });
         gsap.set(rightRef.current, { xPercent: 100 });
-        gsap.set(closing, { opacity: 1, y: 0 });
+        gsap.set([initialsRef.current, dividerRef.current, quoteRef.current, subRef.current], { opacity: 1, y: 0, scaleX: 1, filter: "none" });
         return;
       }
 
@@ -46,19 +51,72 @@ export default function Rsvp() {
         .to(leftRef.current, { xPercent: -100, ease: "none" }, 0)
         .to(rightRef.current, { xPercent: 100, ease: "none" }, 0);
 
-      // Closing monogram + lines rise in once they enter.
-      gsap.fromTo(
-        closing,
-        { opacity: 0, y: 30 },
-        {
-          opacity: 1,
-          y: 0,
-          duration: 0.9,
-          stagger: 0.15,
-          ease: "power3.out",
-          scrollTrigger: { trigger: closingRef.current, start: "top 85%", once: true },
-        }
+      // Closing section — staggered cinematic reveal
+      const tl = gsap.timeline({
+        scrollTrigger: { trigger: closingRef.current, start: "top 80%", once: true },
+      });
+
+      // 1. Initials drop in with a bounce
+      tl.fromTo(
+        initialsRef.current,
+        { opacity: 0, y: -40, scale: 0.7 },
+        { opacity: 1, y: 0, scale: 1, duration: 1.1, ease: "back.out(1.8)" },
+        0
       );
+
+      // 2. Gold shimmer sweep across initials after landing
+      tl.fromTo(
+        initialsRef.current,
+        { backgroundPosition: "200% center" },
+        { backgroundPosition: "-20% center", duration: 1.2, ease: "power2.inOut" },
+        0.8
+      );
+
+      // 3. Divider expands from center
+      tl.fromTo(
+        dividerRef.current,
+        { scaleX: 0, opacity: 0 },
+        { scaleX: 1, opacity: 1, duration: 0.7, ease: "power3.out", transformOrigin: "center" },
+        0.7
+      );
+
+      // 4. Quote rises word by word
+      tl.fromTo(
+        quoteRef.current,
+        { opacity: 0, y: 28, filter: "blur(6px)" },
+        { opacity: 1, y: 0, filter: "blur(0px)", duration: 1, ease: "power3.out" },
+        1.0
+      );
+
+      // 5. Sub text fades up
+      tl.fromTo(
+        subRef.current,
+        { opacity: 0, y: 16 },
+        { opacity: 1, y: 0, duration: 0.8, ease: "power2.out" },
+        1.4
+      );
+
+      // 6. Floating particles drift up
+      if (particlesRef.current) {
+        const dots = particlesRef.current.querySelectorAll(".rsvp-particle");
+        dots.forEach((dot) => {
+          const x = (Math.random() - 0.5) * 200;
+          gsap.fromTo(
+            dot,
+            { opacity: 0, y: 0, x: 0, scale: 0 },
+            {
+              opacity: Math.random() * 0.5 + 0.2,
+              y: -(60 + Math.random() * 80),
+              x,
+              scale: Math.random() * 0.8 + 0.4,
+              duration: 2 + Math.random() * 2,
+              delay: 1.2 + Math.random() * 0.8,
+              ease: "power1.out",
+              scrollTrigger: { trigger: closingRef.current, start: "top 80%", once: true },
+            }
+          );
+        });
+      }
     }, section);
     return () => ctx.revert();
   }, [prefersReducedMotion]);
@@ -99,19 +157,70 @@ export default function Rsvp() {
         </div>
       </div>
 
-      {/* Monogram + warm invitation line — sits right below the invitation,
-          rises in on scroll. Pulled up so there is no empty gap after the
-          contained image. */}
-      <div ref={closingRef} className="relative z-10 -mt-[34vh] px-mobile-margin pb-20 pt-0 text-center md:-mt-[18vh] md:px-container-padding md:pb-24">
-        <h2 className="font-display-lg text-5xl text-secondary-fixed md:text-display-lg">
+      {/* Closing — cinematic invite block */}
+      <div ref={closingRef} className="relative z-10 -mt-[34vh] px-mobile-margin pb-20 pt-0 text-center md:-mt-[18vh] md:px-container-padding md:pb-24 overflow-hidden">
+
+        {/* floating gold particles */}
+        <div ref={particlesRef} className="pointer-events-none absolute inset-0 flex items-end justify-center">
+          {PARTICLES.map((i) => (
+            <span
+              key={i}
+              className="rsvp-particle absolute bottom-1/2 rounded-full"
+              style={{
+                width: `${3 + (i % 4)}px`,
+                height: `${3 + (i % 4)}px`,
+                left: `${20 + (i * 6.5) % 60}%`,
+                background: "radial-gradient(circle, #f4d27a 0%, #c5a059 70%, transparent 100%)",
+                opacity: 0,
+              }}
+            />
+          ))}
+        </div>
+
+        {/* initials — shimmer gradient */}
+        <h2
+          ref={initialsRef}
+          className="font-display-lg text-5xl md:text-display-lg"
+          style={{
+            background: "linear-gradient(110deg, #c5a059 0%, #fff3d0 30%, #f4d27a 50%, #fff3d0 70%, #c5a059 100%)",
+            backgroundSize: "220% 100%",
+            backgroundPosition: "200% center",
+            WebkitBackgroundClip: "text",
+            WebkitTextFillColor: "transparent",
+            backgroundClip: "text",
+            opacity: 0,
+          }}
+        >
           {COUPLE.initials}
         </h2>
-        <div className="mx-auto mt-4 h-px w-20 bg-secondary-fixed md:w-24" />
-        <p className="mx-auto mt-7 max-w-md font-quote text-lg italic leading-relaxed text-secondary-fixed md:mt-10 md:max-w-2xl md:text-3xl">
+
+        {/* expanding divider */}
+        <div
+          ref={dividerRef}
+          className="mx-auto mt-4 h-px w-20 md:w-24"
+          style={{
+            background: "linear-gradient(90deg, transparent, rgba(197,160,89,0.8) 50%, transparent)",
+            transform: "scaleX(0)",
+            opacity: 0,
+          }}
+        />
+
+        {/* quote */}
+        <p
+          ref={quoteRef}
+          className="mx-auto mt-7 max-w-md font-quote text-lg italic leading-relaxed text-secondary-fixed md:mt-10 md:max-w-2xl md:text-3xl"
+          style={{ opacity: 0 }}
+        >
           With hearts full of joy, we lovingly invite you to be part of our
           special day.
         </p>
-        <p className="mx-auto mt-3 max-w-sm font-body-lg text-sm leading-relaxed text-on-primary/75 md:max-w-xl md:text-base">
+
+        {/* sub text */}
+        <p
+          ref={subRef}
+          className="mx-auto mt-3 max-w-sm font-body-lg text-sm leading-relaxed text-on-primary/75 md:max-w-xl md:text-base"
+          style={{ opacity: 0 }}
+        >
           Your presence and blessings mean the world to us. Kindly do come and
           shower the couple with your love.
         </p>
