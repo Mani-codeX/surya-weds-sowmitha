@@ -44,13 +44,13 @@ export default function GarlandExchange() {
         scrollTrigger: {
           trigger: section,
           start: "top top",
-          // long distance → the whole thing plays slowly as you scroll
-          end: "+=260%",
+          end: isMobile ? "+=180%" : "+=260%",
           scrub: 1,
           pin: true,
           pinSpacing: true,
           anticipatePin: 1,
           invalidateOnRefresh: true,
+          onLeave: () => ScrollTrigger.refresh(),
         },
       });
 
