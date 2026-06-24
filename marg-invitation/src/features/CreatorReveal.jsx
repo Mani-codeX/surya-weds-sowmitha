@@ -88,8 +88,8 @@ export default function CreatorReveal() {
 
     const tl = gsap.timeline({ paused: true, defaults: { ease: "power3.out" } });
 
-    tl.to(els.prologue, { opacity: 1, duration: 0.9, ease: "power2.out" })
-      .to(els.prologue, { opacity: 0, duration: 0.7, ease: "power2.in", delay: 2.0 })
+    tl.to(els.prologue, { opacity: 1, duration: 0.6, ease: "power2.out" })
+      .to(els.prologue, { opacity: 0, duration: 0.5, ease: "power2.in", delay: 0.8 })
 
       .to(els.orn,     { opacity: 1, duration: 0.5 })
       .to(els.eyebrow, { opacity: 1, duration: 0.5 }, "-=0.25")
