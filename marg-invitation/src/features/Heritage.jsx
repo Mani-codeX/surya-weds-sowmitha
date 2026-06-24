@@ -112,12 +112,32 @@ export default function Heritage() {
 
   return (
     <Section id="heritage" className="relative overflow-hidden">
+      {/*
+        Mobile layout (grid-cols-1):
+          row 1 → "A LOVE STORY" label
+          row 2 → image
+          row 3 → heading + body + timeline  (narrativeRef, label hidden inside)
+
+        Desktop layout (md:grid-cols-12):
+          col 1-5  → image
+          col 7-12 → full narrative (label + heading + body + timeline)
+      */}
       <div className="relative z-10 grid grid-cols-1 md:grid-cols-12 gap-grid-gutter items-center">
-        {/* Image */}
+
+        {/* ── MOBILE-ONLY label row (hidden on md+) ── */}
+        <Reveal
+          as="span"
+          from="fadeUp"
+          className="font-label-caps text-label-caps text-secondary md:hidden"
+        >
+          A LOVE STORY
+        </Reveal>
+
+        {/* ── Image — row 2 on mobile, left col on desktop ── */}
         <div className="md:col-span-5 relative group">
           <div
             ref={imgRef}
-            className="aspect-[3/4] overflow-hidden rounded-lg shadow-2xl border-4 border-secondary/20 grayscale-[0.2]"
+            className="aspect-3/4 overflow-hidden rounded-lg shadow-2xl border-4 border-secondary/20 grayscale-[0.2]"
           >
             <ProtectedImage
               src={WED_IMG.img2}
@@ -125,12 +145,6 @@ export default function Heritage() {
               className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000"
             />
           </div>
-          {/* Luxury wedding monogram seal — faux-glass (NO backdrop-filter, per
-              the perf rules): layered translucent gradient + thin gold border +
-              soft shadow + premium gold typography. */}
-          {/* Luxury wedding monogram seal — faux-glass (NO backdrop-filter, per
-              the perf rules): layered translucent gradient + thin gold border +
-              soft shadow + premium gold typography. */}
           <div
             ref={badgeRef}
             className="invisible absolute -bottom-7 -right-7 hidden h-40 w-40 flex-col items-center justify-center rounded-xl border border-secondary-fixed/50 bg-primary-container/90 p-4 text-center shadow-[0_18px_44px_rgba(74,4,4,0.45)] md:flex"
@@ -139,9 +153,7 @@ export default function Heritage() {
                 "linear-gradient(135deg, rgba(233,193,118,0.18), transparent 55%), linear-gradient(315deg, rgba(233,193,118,0.10), transparent 50%)",
             }}
           >
-            {/* inset hairline frame for a sealed look */}
             <span className="pointer-events-none absolute inset-1.5 rounded-lg border border-secondary-fixed/25" />
-
             <span className="font-display-lg text-5xl leading-none text-secondary-fixed [text-shadow:0_2px_10px_rgba(0,0,0,0.35)]">
               {COUPLE.initials}
             </span>
@@ -152,9 +164,10 @@ export default function Heritage() {
           </div>
         </div>
 
-        {/* Narrative */}
+        {/* ── Narrative — row 3 on mobile, right col on desktop ── */}
         <div ref={narrativeRef} className="md:col-span-6 md:col-start-7 flex flex-col gap-element-gap">
-          <Reveal as="span" from="fadeUp" className="font-label-caps text-label-caps text-secondary">
+          {/* Label visible only on desktop (mobile version is the separate row above) */}
+          <Reveal as="span" from="fadeUp" className="font-label-caps text-label-caps text-secondary hidden md:block">
             A LOVE STORY
           </Reveal>
 
@@ -174,13 +187,10 @@ export default function Heritage() {
             of.
           </Reveal>
 
-          {/* Journey timeline — fills the space below the story; the line draws
-              and the milestone stops rise in, in sync with the heading. */}
           <div className="relative mt-8">
-            {/* the drawn gold line behind the dots */}
             <span
               ref={tlLineRef}
-              className="absolute left-0 right-0 top-[7px] block h-px origin-left bg-gradient-to-r from-secondary-fixed/60 via-secondary-fixed/60 to-secondary-fixed/60"
+              className="absolute left-0 right-0 top-1.75 block h-px origin-left bg-linear-to-r from-secondary-fixed/60 via-secondary-fixed/60 to-secondary-fixed/60"
               style={{ transform: "scaleX(0)" }}
               aria-hidden="true"
             />
@@ -191,7 +201,7 @@ export default function Heritage() {
                   <span className="mt-3 font-label-caps text-[0.7rem] tracking-[0.2em] text-secondary">
                     {m.year}
                   </span>
-                  <span className="mt-1 max-w-[6rem] font-body-md text-xs text-on-surface-variant/80">
+                  <span className="mt-1 max-w-24 font-body-md text-xs text-on-surface-variant/80">
                     {m.label}
                   </span>
                 </li>
@@ -199,6 +209,7 @@ export default function Heritage() {
             </ol>
           </div>
         </div>
+
       </div>
     </Section>
   );
