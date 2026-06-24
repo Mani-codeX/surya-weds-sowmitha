@@ -40,8 +40,8 @@ export function SmoothScrollProvider({ children }) {
       smoothWheel: true,
       wheelMultiplier: 1,
       syncTouch: true,
-      touchMultiplier: 2,
-      syncTouchLerp: 0.075,
+      touchMultiplier: 1,
+      syncTouchLerp: 0.05,
     });
 
     lenisRef.current = instance;
